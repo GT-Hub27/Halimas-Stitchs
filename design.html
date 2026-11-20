@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- ✏️ EDIT: text shown in the browser tab -->
+<title>Custom design | Halima Stitches</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="design">
+<div id="hdr"></div>
+<main>
+<!-- ✏️ EDIT TEXT: custom design page: intro, the 4 steps, and the garment, fabric and budget options in the form -->
+<div class="wrap sec" id="design">
+<h2 style="margin-top:10px">Custom design</h2>
+<p class="sub">Dream it, and we’ll sew it. Here’s how it works, and then you can build your piece and send your brief to our designers.</p>
+<div class="steps">
+<div><span>Step 1</span><b>Share your idea</b>Pick a garment, fabric and colour below and tell us about your inspiration.</div>
+<div><span>Step 2</span><b>Consultation and quote</b>We confirm the details and the price with you on WhatsApp.</div>
+<div><span>Step 3</span><b>Measurements and fabric</b>Visit the studio for measurements and to choose your fabric.</div>
+<div><span>Step 4</span><b>Sewing and final fitting</b>We sew your piece, then invite you back for a final fitting.</div>
+</div>
+<p class="sub" style="font-size:13px">Timelines and pricing depend on the design and are confirmed after your consultation.</p>
+<h3 style="font-size:28px;margin:8px 0 14px">Start your design</h3>
+<div class="bk">
+<div class="card" style="padding:18px">
+<div class="fg">
+<label>Your name<input id="dnm" autocomplete="name"></label>
+<label>Garment<select id="dg"><option>Dress</option><option>Skirt &amp; top set</option><option>Pant suit</option><option>Jumpsuit</option><option>Kaftan / Agbada</option><option>Corset</option><option>Something else</option></select></label>
+<label>Fabric<select id="df"><option>Ankara</option><option>Aso Oke</option><option>Lace</option><option>Kente</option><option>Satin / Silk</option><option>Adire</option></select></label>
+<label>Budget<select id="db"><option>Not sure yet</option><option>Under ₦50,000</option><option>₦50,000–₦100,000</option><option>₦100,000–₦200,000</option><option>Over ₦200,000</option></select></label>
+<label>Needed by<input id="dn" type="date"></label>
+</div>
+<label style="margin-top:12px">Colour</label>
+<div id="dsw" style="display:flex;gap:10px;margin-top:6px"></div>
+<label style="margin-top:12px">Your ideas<textarea id="dnote" placeholder="Describe the style, neckline, length, occasion, or paste an inspiration link…"></textarea></label>
+<label class="drop" id="drp"><input type="file" id="dfile" accept="image/*"><span id="dph">📷 Add a reference picture<br><small>Tap to choose a photo, or drop one here</small></span><img id="dim" alt="Your reference picture" hidden><button type="button" id="drm" hidden style="border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:3px 12px;cursor:pointer;font:inherit;font-size:13px">Remove</button></label>
+<div class="sub" id="dhint" style="font-size:12px;margin:6px 0 0">The picture stays on your device. When WhatsApp opens, attach it to the chat.</div>
+<div id="dm" class="sub" style="margin:10px 0 0;min-height:1.5em"></div>
+<button class="btn" id="dgo" style="margin-top:8px">Send my design brief on WhatsApp</button>
+</div>
+<div class="card" style="padding:18px">
+<div id="dpv"><svg id="dmn" viewBox="0 0 220 300" role="img" aria-label="Mannequin wearing your chosen design" style="--gc:#1f6b4f">
+<defs>
+<filter id="fab" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b"/>
+<feDiffuseLighting in="b" surfaceScale="5" diffuseConstant="1.15" lighting-color="#ffffff" result="d"><feDistantLight azimuth="225" elevation="60"/></feDiffuseLighting>
+<feComposite in="SourceGraphic" in2="d" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="m"/>
+<feSpecularLighting in="b" surfaceScale="5" specularConstant=".5" specularExponent="22" lighting-color="#ffffff" result="s"><feDistantLight azimuth="225" elevation="60"/></feSpecularLighting>
+<feComposite in="s" in2="SourceAlpha" operator="in" result="sp"/>
+<feComposite in="m" in2="sp" operator="arithmetic" k1="0" k2="1" k3=".45" k4="0"/>
+</filter>
+<filter id="mbl"><feGaussianBlur stdDeviation="3"/></filter>
+<linearGradient id="mbg" x1="0" x2="1"><stop offset="0" stop-color="#f4ece3"/><stop offset=".6" stop-color="#d9ccbe"/><stop offset="1" stop-color="#b5a797"/></linearGradient>
+</defs>
+<ellipse cx="110" cy="288" rx="52" ry="7" fill="rgba(0,0,0,.28)" filter="url(#mbl)"/>
+<g filter="url(#fab)"><path fill="url(#mbg)" d="M82 60C76 62 74 72 72 84L63 138C62 143 65 146 69 146C73 146 75 143 76 138L88 86C90 76 88 62 82 60Z"/><path fill="url(#mbg)" d="M138 60C144 62 146 72 148 84L157 138C158 143 155 146 151 146C147 146 145 143 144 138L132 86C130 76 132 62 138 60Z"/><path fill="url(#mbg)" d="M92 156C90 190 92 230 94 270C94 276 100 278 103 276C105 270 106 230 108 190L110 156Z"/><path fill="url(#mbg)" d="M128 156C130 190 128 230 126 270C126 276 120 278 117 276C115 270 114 230 112 190L110 156Z"/>
+<ellipse cx="97" cy="278" rx="12" ry="4.5" fill="#a89a8a"/><ellipse cx="123" cy="278" rx="12" ry="4.5" fill="#a89a8a"/>
+<path fill="url(#mbg)" d="M90 56C100 54 120 54 130 56C136 60 134 84 130 100C127 114 127 124 132 144C136 156 134 166 128 170L92 170C86 166 84 156 88 144C93 124 93 114 90 100C86 84 84 60 90 56Z"/>
+<path fill="url(#mbg)" d="M104 40H116L117 58H103Z"/><ellipse cx="110" cy="27" rx="12" ry="15" fill="url(#mbg)"/></g>
+<g class="gm" id="g-dress"><path d="M90 58L130 58C134 80 128 100 128 124L158 236C130 244 90 244 62 236L92 124C92 100 86 80 90 58Z"/><path class="ln" d="M92 124H128"/><path class="fd" d="M100 130L88 232M110 130L110 240M120 130L132 232"/></g>
+<g class="gm" id="g-set"><path d="M84 60L136 60L152 90L140 98L130 114L90 114L80 98L68 90Z"/><path d="M90 122H130L146 208C124 214 96 214 74 208Z"/><path class="fd" d="M100 128L92 208M110 128L110 211M120 128L128 208"/></g>
+<g class="gm" id="g-pant"><path d="M88 150L110 150L112 272L84 272Z"/><path d="M110 150L132 150L136 272L108 272Z"/><path d="M82 58L138 58L152 72L160 144L148 146L142 104L138 164L82 164L78 104L72 146L60 144L68 72Z"/><path class="sd" d="M110 58L99 104L110 126L121 104Z"/><path class="ln" d="M110 126L110 164"/></g>
+<g class="gm" id="g-jump"><path d="M92 58L128 58L126 124L136 150L138 272L113 272L110 176L107 272L82 272L84 150L94 124Z"/><path class="ln" d="M94 124H126"/></g>
+<g class="gm" id="g-kaftan"><path d="M84 58L136 58L178 150L168 166L148 130L154 252L66 252L72 130L52 166L42 150Z"/><path class="sd" d="M110 58L102 86L110 96L118 86Z"/><path class="ln" d="M110 96L110 252"/><path class="fd" d="M90 150L82 248M130 150L138 248"/></g>
+<g class="gm" id="g-corset"><path d="M88 70C94 64 102 72 110 72C118 72 126 64 132 70L130 128C126 138 126 148 130 160L90 160C94 148 94 138 90 128Z"/><path d="M90 158L130 158L138 178C122 184 98 184 82 178Z"/><path class="ln" d="M100 76V156M110 74V158M120 76V156"/></g>
+<g class="gm" id="g-other"><path style="fill-opacity:.45;stroke-dasharray:4 3" d="M88 58L132 58L142 196L78 196Z"/></g>
+<g id="bs"><g transform="translate(40 80) scale(1.4)"><path class="bp" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z"/></g><g transform="translate(184 70) scale(1.2)"><path class="bp" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z"/></g><g transform="translate(30 190) scale(1)"><path class="bp" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z"/></g><g transform="translate(192 200) scale(1.3)"><path class="bp" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z"/></g></g>
+</svg></div>
+<div class="dcap" id="dtx"></div>
+<p class="sub" style="margin:12px 0 0;font-size:13px">The preview is a guide only. We’ll confirm the design, fabric, finish and price after a quick consultation.</p>
+</div>
+</div>
+</div>
+
+
+</main>
+<div id="ftr"></div>
+<script src="config.js"></script>
+<script src="products.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

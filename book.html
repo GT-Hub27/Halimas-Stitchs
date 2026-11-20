@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- ✏️ EDIT: text shown in the browser tab -->
+<title>Book a fitting | Halima Stitches</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="book">
+<div id="hdr"></div>
+<main>
+<!-- ✏️ EDIT TEXT: Book a fitting page: intro, welcome message, services, time slots, opening hours -->
+<div class="wrap sec" id="book">
+<h2 style="margin-top:10px">Book a fitting</h2>
+<p class="sub">Pick a service and a time that suits you. We’ll confirm your slot on WhatsApp.</p>
+<div class="stage" id="stg">
+<svg id="mn" viewBox="0 0 220 300" role="img" aria-label="Illustration of a dress form wrapped in a measuring tape">
+<defs>
+<radialGradient id="gb" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#f1d3a8"/><stop offset=".55" stop-color="#c58b4e"/><stop offset="1" stop-color="#6e431c"/></radialGradient>
+<linearGradient id="gm" x1="0" x2="1"><stop offset="0" stop-color="#e9e4da"/><stop offset=".5" stop-color="#9c968b"/><stop offset="1" stop-color="#5d584f"/></linearGradient>
+</defs>
+<ellipse cx="110" cy="284" rx="62" ry="8" fill="rgba(0,0,0,.2)"/>
+<rect x="106" y="212" width="8" height="66" fill="url(#gm)"/>
+<ellipse cx="110" cy="278" rx="40" ry="7" fill="url(#gm)"/>
+<rect x="108" y="30" width="4" height="10" fill="#d9a441"/><circle cx="110" cy="28" r="5" fill="#d9a441"/>
+<path d="M95 40C95 52 80 56 70 66C64 80 76 108 88 128C93 140 86 150 78 190C76 205 84 214 110 216C136 214 144 205 142 190C134 150 127 140 132 128C144 108 156 80 150 66C140 56 125 52 125 40C125 34 95 34 95 40Z" fill="url(#gb)"/>
+<g fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5"><path d="M110 56C106 110 106 160 110 214"/><path d="M92 84C100 124 98 162 90 204"/><path d="M128 84C120 124 122 162 130 204"/></g>
+<g fill="none" stroke-linecap="round"><ellipse cx="110" cy="148" rx="26" ry="6" stroke="#f2c94c" stroke-width="6"/><ellipse cx="110" cy="148" rx="26" ry="6" stroke="rgba(0,0,0,.45)" stroke-width="6" stroke-dasharray="1 6"/><path d="M135 150C152 166 146 188 154 206" stroke="#f2c94c" stroke-width="6"/><path d="M135 150C152 166 146 188 154 206" stroke="rgba(0,0,0,.45)" stroke-width="6" stroke-dasharray="1 6"/></g>
+<g id="sp"><path class="tw" transform="translate(36 72)" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z" fill="#d9a441"/><path class="tw" transform="translate(188 112) scale(1.2)" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z" fill="#f2c94c"/><path class="tw" transform="translate(52 205) scale(.7)" d="M0-8L2.5-2.5L8 0L2.5 2.5L0 8L-2.5 2.5L-8 0L-2.5-2.5Z" fill="#d9a441"/></g>
+</svg>
+<div class="stx">
+<h3>Your fitting, made just for you</h3>
+<p>Take your time. We’ll listen to your ideas, measure with care and make sure every detail feels like you.</p>
+<div class="chips"><span>✓ Personal measurements</span><span>✓ Fabric guidance</span><span>✓ Final fitting included</span></div>
+</div>
+</div>
+<div class="bk">
+<div class="card" style="padding:18px">
+<div class="fg">
+<label>Full name<input id="bn" autocomplete="name"></label>
+<label>Phone / WhatsApp<input id="bp" type="tel" autocomplete="tel"></label>
+<label>Service<select id="bsv"><option>Custom outfit</option><option>Bridal &amp; event wear</option><option>Alterations</option><option>Style consultation</option></select></label>
+<label>Preferred date<input id="bd" type="date"></label>
+<label>Preferred time<select id="bt"><option>Morning (10am–12pm)</option><option>Afternoon (12–3pm)</option><option>Late afternoon (3–6pm)</option></select></label>
+</div>
+<label style="margin-top:12px">Notes<textarea id="bnote" placeholder="Occasion, event date, fabric or style ideas…"></textarea></label>
+<div id="bm" class="sub" style="margin:10px 0 0;min-height:1.5em"></div>
+<button class="btn" id="bgo" style="margin-top:8px">Request fitting on WhatsApp</button>
+</div>
+<div class="card" style="padding:18px">
+<h3>What to expect</h3>
+<ol><li>Send your request and we’ll confirm a time on WhatsApp.</li><li>Visit the studio for measurements and to choose your fabric and design.</li><li>We sew your piece and invite you back for a final fitting.</li></ol>
+<p class="sub" style="margin:14px 0 0"><b>Where to come for your fitting</b><br><span class="addr"></span><br><a id="mp" href="#" target="_blank" rel="noopener" style="color:var(--accent)">Get directions ↗</a></p>
+<p class="sub" style="margin:14px 0 0"><b>Studio hours</b><br>Mon–Sat, 10am–6pm. Closed Sundays.</p>
+</div>
+</div>
+</div>
+
+
+</main>
+<div id="ftr"></div>
+<script src="config.js"></script>
+<script src="products.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
