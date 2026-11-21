@@ -5,8 +5,8 @@
 var PRODUCTS=[
 {n:'Ada Wrap Dress',c:'Dresses',p:48000,h:28,f:'Ankara',img:['images/img-2.jpg']},
 {n:'Zuri Maxi Dress',c:'Dresses',p:62000,h:12,f:'Ankara',img:['images/img-1iu.jpg']},
-{n:'Kente Crop Top',c:'Tops',p:22000,h:350,f:'Kente',img:[]},
-{n:'Ankara Peplum Blouse',c:'Tops',p:26500,h:190,f:'Ankara',img:[]},
+{n:'Kente Crop Top',c:'Tops',p:22000,h:350,f:'Kente',img:['images/img-3.jpg']},
+{n:'Ankara Peplum Blouse',c:'Tops',p:26500,h:190,f:'Ankara',img:['images/img-1.jpg']},
 {n:'Lagos Two-Piece Set',c:'Sets',p:75000,h:150,f:'Ankara',img:[]},
 {n:'Ife Palazzo Set',c:'Sets',p:68000,h:265,f:'Ankara',img:[]},
 {n:'Aso Oke Clutch',c:'Accessories',p:18000,h:40,f:'Aso Oke',img:[]},
