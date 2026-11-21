@@ -1,6 +1,8 @@
 /* Shared script for every page. Page-specific parts run only on their own page. */
 (function(){
 var $=function(i){return document.getElementById(i)||document.createElement('div')};
+if(typeof STORE!=='undefined'&&STORE.products&&STORE.products.length)PRODUCTS=STORE.products;
+var MAIL=(typeof EMAIL!=='undefined'&&EMAIL)||'hello@example.com';
 var P=PRODUCTS,pg=document.body.dataset.page,cat='All';
 function naira(n){return '₦'+n.toLocaleString('en-NG')}
 function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
@@ -10,7 +12,7 @@ function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
 /* ---------- header, side menu, contact footer, bag (shared on every page) ---------- */
-var logoHtml=LOGO?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
+var logoHtml=(typeof LOGO!=='undefined'&&LOGO)?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
 var user=ld('mn_user',null);
 var LINKS=[['index.html','Home','home'],['women.html','Women','women'],['men.html','Men','men'],['accessories.html?t=F','Accessories','accessories'],['design.html','Custom design','design'],['story.html','Our story','story'],['book.html','Book a fitting','book']];
 var ACCS=[['M','Male accessories'],['F','Female accessories'],['U','Unisex accessories']];
@@ -18,7 +20,7 @@ function nav(side){return LINKS.map(function(l){var a='<a href="'+l[0]+'"'+(pg==
 var acct=user?'Sign out':'Sign in';
 $('hdr').innerHTML='<header><div class="wrap"><a class="logo" href="index.html">'+logoHtml+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a><button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button><button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+logoHtml+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav(1)+'<a href="signin.html" id="acc2">'+acct+'</a></div></aside>';
 /* ✏️ EDIT TEXT: the contact block that appears at the bottom of every page (details come from config.js) */
-$('ftr').innerHTML='<section class="wrap sec" id="contact"><h2>Contact us</h2><p class="sub">Questions, custom orders or bulk requests? We’d love to hear from you.</p><div class="cols"><div><b>WhatsApp</b><br><a href="https://wa.me/'+WA+'" target="_blank" rel="noopener">Chat with us</a></div><div><b>Instagram</b><br>'+INSTAGRAM+'</div><div><b>Studio</b><br>'+ADDR+'<br>'+HOURS+'</div></div></section><footer>© '+new Date().getFullYear()+' '+BRAND+'. All rights reserved.</footer>'+"<aside id=\"dr\" aria-label=\"Shopping bag\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\"><h2 style=\"font-size:28px\">Your bag</h2><button class=\"bagbtn\" id=\"cl\">Close</button></div>\n<div id=\"dl\"></div>\n<div style=\"padding-top:12px\"><div class=\"li\" style=\"border:0;font-weight:500\"><span>Total</span><span id=\"tt\">\u20a60</span></div>\n<a class=\"btn\" id=\"wa\" href=\"#\" target=\"_blank\" rel=\"noopener\" style=\"display:block;text-align:center;margin-top:6px\">Order on WhatsApp</a></div>\n</aside>";
+$('ftr').innerHTML='<section class="wrap sec" id="contact"><h2>Contact us</h2><p class="sub">Questions, custom orders or bulk requests? We’d love to hear from you.</p><div class="cols"><div><b>Email</b><br><a href="mailto:'+MAIL+'">Send us an email</a></div><div><b>Instagram</b><br>'+INSTAGRAM+'</div><div><b>Studio</b><br>'+ADDR+'<br>'+HOURS+'</div></div></section><footer>© '+new Date().getFullYear()+' '+BRAND+'. All rights reserved. · <a href="admin.html">Admin</a></footer>'+"<aside id=\"dr\" aria-label=\"Shopping bag\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\"><h2 style=\"font-size:28px\">Your bag</h2><button class=\"bagbtn\" id=\"cl\">Close</button></div>\n<div id=\"dl\"></div>\n<div style=\"padding-top:12px\"><div class=\"li\" style=\"border:0;font-weight:500\"><span>Total</span><span id=\"tt\">\u20a60</span></div>\n<a class=\"btn\" id=\"wa\" href=\"#\" target=\"_blank\" rel=\"noopener\" style=\"display:block;text-align:center;margin-top:6px\">Order on WhatsApp</a></div>\n</aside>";
 function signout(e){if(user){e.preventDefault();try{localStorage.removeItem('mn_user')}catch(x){}location.reload()}}
 $('acc').onclick=$('acc2').onclick=signout;
 function menu(o){$('sm').classList.toggle('open',o);$('ov').classList.toggle('open',o);document.body.classList.toggle('lock',o)}
@@ -43,7 +45,7 @@ return '<div class="li"><span>'+n+' × '+x.n+(a[1]?' · '+a[1]:'')+'<br><span st
 msg+='Total: '+naira(t);$('tt').textContent=naira(t);$('bc').textContent=q;$('wa').href=k.length?'https://wa.me/'+WA+'?text='+encodeURIComponent(msg):'#'}
 
 /* ---------- product cards (open the product page when clicked) ---------- */
-function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'"></div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+naira(x.p)+'</span><button data-a="'+i+'">Add<span class="t2"> to bag</span></button></div></div></div>'}
+function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'">'+(x.tag?'<i class="tg">'+x.tag+'</i>':'')+'</div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+(x.was?'<s class="was">'+naira(x.was)+'</s> ':'')+naira(x.p)+'</span><button data-a="'+i+'">Add<span class="t2"> to bag</span></button></div></div></div>'}
 var at=new URLSearchParams(location.search).get('t')||'F';
 function inScope(x){if(pg==='women')return x.c!=='Accessories'&&x.g!=='M';if(pg==='men')return x.c!=='Accessories'&&x.g!=='F';if(pg==='accessories')return x.c==='Accessories'&&x.g===at;return true}
 function tabs(){if(pg==='accessories'){$('tabs').innerHTML=ACCS.map(function(c){return '<button data-t="'+c[0]+'"'+(c[0]===at?' class="on"':'')+'>'+c[1]+'</button>'}).join('');return}
@@ -73,7 +75,7 @@ var sz=sizes(px0),sel=sz.length?'M':'',qty=1,bk=px0.c==='Accessories'?'accessori
 document.title=px0.n+' | '+BRAND;
 var wl=function(){return 'https://wa.me/'+WA+'?text='+encodeURIComponent('Hello '+BRAND+', I\u2019d like to order '+qty+' × '+px0.n+(sel?' (size '+sel+')':'')+' ('+naira(px0.p*qty)+').')};
 var rel=[];P.forEach(function(x,i){if(x.c===px0.c&&x.g===px0.g&&i!==pi)rel.push(i)});
-$('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+(px0.g==='M'?' · Men':px0.g==='F'?' · Women':' · Unisex')+'</div><h1>'+px0.n+'</h1><div class="pr">'+naira(px0.p)+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
+$('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+(px0.g==='M'?' · Men':px0.g==='F'?' · Women':' · Unisex')+'</div><h1>'+px0.n+'</h1><div class="pr">'+(px0.was?'<s class="was">'+naira(px0.was)+'</s> ':'')+naira(px0.p)+(px0.tag?' <i class="tg" style="position:static;vertical-align:middle">'+px0.tag+'</i>':'')+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
 (sz.length?'<label class="sub" style="margin:0">Size</label><div class="sz" id="szs">'+sz.map(function(s){return '<button data-s="'+s+'" class="'+(s===sel?'on':'')+'">'+s+'</button>'}).join('')+'</div>':'')+
 '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><div class="qty"><button data-q="-1" aria-label="Fewer">−</button><span id="qv">1</span><button data-q="1" aria-label="More">+</button></div><button class="btn" id="pa">Add to bag</button><a class="btn o" id="pwa" target="_blank" rel="noopener" style="margin:0">Order on WhatsApp</a></div>'+
 '<dl class="dt"><div><dt>Fabric</dt><dd>'+(px0.f||'Quality fabric')+'</dd></div><div><dt>Sizes</dt><dd>'+(sz.length?sz.join(', ')+', or made to your measurements':'One size')+'</dd></div><div><dt>Care</dt><dd>Hand wash cold or dry clean. Iron on a low heat.</dd></div><div><dt>Delivery</dt><dd>Made to order. Timelines are confirmed with you on WhatsApp.</dd></div></dl></div></div>'+
@@ -171,6 +173,7 @@ document.querySelectorAll('.tiles').forEach(function(t){var w=document.createEle
 function chk(){w.classList.toggle('no',t.scrollWidth<=t.clientWidth+4)}chk();addEventListener('resize',chk)});
 /* flash sale bar: repeats the message so it can scroll without end */
 (function(){var f=$('fst'),t=f.dataset.text;if(t){var u='<span>⚡ '+t+'</span>',h='';for(var n=0;n<16;n++)h+=u;f.innerHTML=h}})();
+/* wording changed in the admin page */
+if(typeof STORE!=='undefined'&&STORE.text)document.querySelectorAll('[data-k]').forEach(function(e){var v=STORE.text[e.dataset.k];if(v==null||v==='')return;if(e.dataset.n!==undefined){e.dataset.n=parseInt(v)||0;return}e.innerHTML=v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')});
 renderBag();
 })();
-

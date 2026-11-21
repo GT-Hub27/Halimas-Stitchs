@@ -1,12 +1,10 @@
-/* =====================================================================
-   ✏️ EDIT HERE FIRST: your brand details. Search for ✏️ and 🖼️ to find every place to edit.
-   ===================================================================== */
-var BRAND='Halima Stitches';                 /* ✏️ EDIT: brand name (also change it in the HTML files with Find & Replace, Ctrl+H) */
+
+var BRAND='Halima Stitches';                
 var LOGO='';
-var WA='2347026973893';                  /* ✏️ EDIT: WhatsApp number, country code first, no + or spaces */
-var INSTAGRAM='@halima_stitches01';             /* ✏️ EDIT: Instagram handle */
-var ADDR='Your Street Address, Area, City, State, Nigeria'; /* ✏️ EDIT: studio address for fittings */
-var HOURS='Mon–Sat, 10am–6pm';           /* ✏️ EDIT: opening hours */
+var WA='2347026973893';                 
+var INSTAGRAM='@halima_stitches01';            
+var ADDR='Your Street Address, Area, City, State, Nigeria';  
+var HOURS='Mon–Sat, 10am–6pm';          
 var ENDPOINT='';                         /* ✏️ EDIT: form service address (optional, leave empty to use WhatsApp) */
 var HERO_IMAGE='';                       /* 🖼️ IMAGE: big photo on the home page, e.g. 'images/hero.jpg' */
 /* Sign in. With OTP_DEMO true, the code is shown on screen and no SMS is sent. For real SMS codes you need a small server: put its addresses below and set OTP_DEMO to false. */

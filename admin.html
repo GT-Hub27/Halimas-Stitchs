@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Admin</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.ad{max-width:980px;margin:0 auto;padding:20px clamp(16px,4vw,32px) 60px}.ad h1{font-size:32px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:14px 0}
+.ad label{display:block;font-size:13px;color:var(--muted);margin-top:10px}
+.ad input,.ad select,.ad textarea{width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit}
+.ad textarea{min-height:90px;resize:vertical}.ad .cb{width:auto;margin:0}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.pl{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px}
+.pl .t0{width:48px;height:60px;border-radius:8px;flex:none;background-size:cover;background-position:center}
+.pl .nm{flex:1;min-width:0}.pl small{color:var(--muted)}
+.b{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer;display:inline-block}.b.dg{color:#d93025}
+.ps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:8px}
+.ps>div{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--card);text-align:center}
+.ps .im{aspect-ratio:4/5;border-radius:8px;background-size:cover;background-position:center;background-color:var(--bg);margin-bottom:6px}.ps .b{margin:2px;padding:4px 10px;font-size:12px}
+.msg{min-height:1.4em;color:var(--accent);margin:8px 0}
+.mdl{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90;overflow:auto;padding:16px}html{-webkit-text-size-adjust:100%}.ad{overflow-x:hidden}#login{max-width:460px;margin:0 auto}
+.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{white-space:nowrap}
+@media(max-width:640px){.ad input,.ad select,.ad textarea,.mdl input:not([type=file]),.mdl select,.mdl textarea{font-size:16px}.ad h1{font-size:28px}.bar>div:last-child{width:100%;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.bar>div:last-child .btn{flex:1}.bar>div:last-child #st{flex-basis:100%;margin:0}.mf{flex-wrap:wrap}.mf .msg{flex-basis:100%}.mf .b,.mf .btn{flex:1}}
+#tw .g2{margin-bottom:6px}.wh{font-family:var(--sans);font-size:13px;letter-spacing:.06em;font-weight:600;margin:20px 0 10px}
+#pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.pc{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.pc .pi{position:relative;aspect-ratio:4/5;background-size:cover;background-position:center}
+.pc .pd{padding:10px 12px 4px;flex:1}.pc .pd b{display:block;font-size:14px;line-height:1.3;height:2.6em;overflow:hidden}.pc small{color:var(--muted);display:block;margin-top:2px}.pc .pp{margin-top:6px;font-weight:500}
+.pc .pa{display:flex;gap:6px;padding:8px 12px 12px}.pc .pa .b{flex:1;text-align:center}
+@media(max-width:560px){#pl{grid-template-columns:repeat(2,1fr);gap:10px}}
+.mdl>div{max-width:880px;margin:0 auto;background:var(--bg);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.mh{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 24px;border-bottom:1px solid var(--line)}.mh h2{font-size:28px}.mh p{margin:2px 0 0;font-size:13px}
+.sc{padding:18px 24px;border-bottom:1px solid var(--line)}
+.sc h3{font-family:var(--sans);font-size:13px;letter-spacing:.06em;font-weight:600;margin:0 0 12px}
+.g2,.g3,.g4{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.gap{margin-top:14px}
+.mdl label:not(.b){display:block;font-size:12.5px;color:var(--muted)}
+.mdl input:not([type=file]),.mdl select,.mdl textarea{display:block;width:100%;margin-top:6px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit}
+.mdl input:not([type=file]),.mdl select{height:42px}.mdl textarea{min-height:110px;resize:vertical}
+.mdl input:focus,.mdl select:focus,.mdl textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.hint{color:var(--muted);font-size:12px;display:block;margin-top:10px}
+.mf{position:sticky;bottom:0;display:flex;gap:10px;align-items:center;justify-content:flex-end;padding:14px 24px;background:var(--bg);border-top:1px solid var(--line);border-radius:0 0 18px 18px}.mf .msg{flex:1;margin:0;font-size:13px}
+.pt{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--card);text-align:center}.pt.m{border-color:var(--accent)}.pt .sl{font-size:12px;color:var(--muted);margin-bottom:6px}
+.pt .im{aspect-ratio:1;border-radius:8px;background-size:cover;background-position:center;background-color:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}.pt .im.e{border:2px dashed var(--line)}
+.pb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px}.pb .b{padding:4px 10px;font-size:12px}
+@media(max-width:640px){.mdl{padding:0}.mdl>div{border-radius:0;min-height:100%}.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}.mf{border-radius:0}}
+[hidden]{display:none!important}
+</style></head>
+<body><div class="ad">
+<h1>Admin</h1>
+<div id="login">
+<p class="sub">Only people with edit access to the site’s GitHub repository can save changes. Sign in with the repository details and your access key.</p>
+<label>GitHub username (owner of the repository)<input id="o"></label>
+<label>Repository name<input id="r"></label>
+<label>Access key<input id="k" type="password" autocomplete="current-password"></label>
+<label style="display:flex;gap:8px;align-items:center"><input class="cb" id="rm" type="checkbox"> Remember on this device</label>
+<div class="msg" id="lm"></div><button class="btn" id="go">Sign in</button>
+</div>
+<div id="app" hidden>
+<div class="bar"><div class="tabs" id="tb"><button class="on" data-t="p">Products</button><button data-t="w">Wording</button></div>
+<div><span id="st" class="sub" style="margin-right:10px"></span><button class="btn" id="pub" style="margin:0">Publish changes</button> <button class="b" id="so">Sign out</button></div></div>
+<div class="msg" id="am"></div>
+<div id="tp"><div class="bar"><input id="q" placeholder="Search products" style="max-width:260px;margin:0"><button class="b" id="add">+ Add product</button></div><div id="pl"></div></div>
+<div id="tw" hidden></div>
+</div></div>
+<div class="mdl" id="md" hidden><div id="ed"></div></div>
+<script src="config.js"></script><script src="products.js"></script><script src="products-extra.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var O,R,T,S={products:null,text:{}},SHA=null,dirty=false,cur=-1,W=null,DEF={},PRE={};
+var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')};
+var cl=function(s){return String(s).replace(/[<>]/g,'').trim()};
+function gh(p,o){return fetch('https://api.github.com/repos/'+O+'/'+R+'/'+p,Object.assign({},o||{},{headers:{Authorization:'Bearer '+T,Accept:'application/vnd.github+json'}}))}
+function say(t){$('am').textContent=t}
+function pic(p){return p?"url('"+encodeURI(PRE[p]||p)+"')":'none'}
+try{var sv=JSON.parse(localStorage.getItem('ad_cfg')||'null');if(sv){$('o').value=sv.o;$('r').value=sv.r;$('k').value=sv.k;$('rm').checked=true}}catch(e){}
+if(!$('o').value&&/\.github\.io$/.test(location.hostname)){$('o').value=location.hostname.split('.')[0];$('r').value=location.pathname.split('/')[1]||''}
+$('go').onclick=async function(){O=$('o').value.trim();R=$('r').value.trim();T=$('k').value.trim();var m=$('lm');m.textContent='Checking…';
+try{var r=await gh('');if(!r.ok){m.textContent='That key or repository was not accepted. Check the details.';return}
+var j=await r.json();if(!j.permissions||!j.permissions.push){m.textContent='This key can’t edit the site. Ask the owner for write access.';return}
+try{if($('rm').checked)localStorage.setItem('ad_cfg',JSON.stringify({o:O,r:R,k:T}));else localStorage.removeItem('ad_cfg')}catch(e){}
+await load();$('login').hidden=true;$('app').hidden=false;render()}catch(e){m.textContent='Could not connect. Check your internet and try again.'}};
+async function load(){var r=await gh('contents/data/store.js');
+if(r.ok){var j=await r.json();SHA=j.sha;var t=decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));try{S=JSON.parse(t.slice(t.indexOf('=')+1,t.lastIndexOf(';')))}catch(e){S={}}}
+S.products=S.products||JSON.parse(JSON.stringify(PRODUCTS));S.text=S.text||{};
+for(var pi of ['index.html','story.html']){try{var h=await (await fetch(pi)).text(),d=new DOMParser().parseFromString(h,'text/html');d.querySelectorAll('[data-k]').forEach(function(e){DEF[e.dataset.k]=e.dataset.n!==undefined?e.dataset.n:e.innerHTML.replace(/<br\s*\/?>/g,'\n').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')})}catch(e){}}}
+function render(){var q=($('q').value||'').toLowerCase();
+$('pl').innerHTML=S.products.map(function(x,i){if(q&&(x.n+' '+x.c).toLowerCase().indexOf(q)<0)return '';
+return '<div class="pc"><div class="pi" style="background-image:'+pic((x.img||[])[0])+';background-color:hsl('+(x.h||30)+' 50% 60%)">'+(x.tag?'<i class="tg">'+esc(x.tag)+'</i>':'')+'</div><div class="pd"><b>'+esc(x.n)+'</b><small>'+esc(x.c)+' · '+({M:'Men',F:'Women',U:'Unisex'}[x.g]||'')+'</small><div class="pp">₦'+(+x.p).toLocaleString()+(x.was?' <s class="was">₦'+(+x.was).toLocaleString()+'</s>':'')+'</div></div><div class="pa"><button class="b" data-e="'+i+'">Edit</button><button class="b dg" data-x="'+i+'">Delete</button></div></div>'}).join('');
+var ks=Object.keys(DEF),gr=[['Home page',ks.filter(function(k){return k.indexOf('Story page:')!==0})],['Our story page',ks.filter(function(k){return k.indexOf('Story page:')===0})]];
+$('tw').innerHTML=gr.map(function(g){return g[1].length?'<h3 class="wh">'+g[0]+'</h3><div class="g2">'+g[1].map(function(k){var v=S.text[k]!=null?S.text[k]:DEF[k];return '<label>'+esc(k.replace('Story page: ',''))+'<textarea data-w="'+esc(k)+'">'+esc(v)+'</textarea></label>'}).join('')+'</div>':''}).join('')||'<p class="sub">No editable wording found.</p>';
+$('st').textContent=dirty?'Unpublished changes':'Up to date'}
+$('q').oninput=render;$('so').onclick=function(){try{localStorage.removeItem('ad_cfg')}catch(e){}location.reload()};
+$('tb').onclick=function(e){var t=e.target.dataset.t;if(!t)return;document.querySelectorAll('#tb button').forEach(function(b){b.classList.toggle('on',b===e.target)});$('tp').hidden=t!=='p';$('tw').hidden=t!=='w'};
+$('tw').oninput=function(){dirty=true;$('st').textContent='Unpublished changes'};
+$('pl').onclick=function(e){var a=e.target.dataset;if(a.e!=null)edit(+a.e);if(a.x!=null&&confirm('Delete this product from the site?')){S.products.splice(+a.x,1);dirty=true;render()}};
+$('add').onclick=function(){edit(-1)};
+function edit(i){cur=i;W=i<0?{n:'',c:'',g:'F',p:0,h:Math.floor(Math.random()*360),f:'',img:[]}:JSON.parse(JSON.stringify(S.products[i]));W.img=W.img||[];for(var k=0;k<4;k++)W.img[k]=W.img[k]||'';
+var cats=S.products.map(function(x){return x.c}).filter(function(v,j,a){return a.indexOf(v)===j});
+$('ed').innerHTML='<div class="mh"><div><h2>'+(i<0?'Add product':'Edit product')+'</h2><p class="sub">Save the product, then press Publish changes to update the site.</p></div><button class="b" id="cc" aria-label="Close">\u2715</button></div>'
++'<div class="sc"><h3>Basics</h3><label>Name<input id="fn" placeholder="e.g. Ada Wrap Dress"></label><div class="g2 gap"><label>Category<input id="fc" list="cl" placeholder="e.g. Dresses"></label><label>For<select id="fg"><option value="F">Women</option><option value="M">Men</option><option value="U">Unisex</option></select></label></div></div>'
++'<div class="sc"><h3>Price and label</h3><div class="g3"><label>Price (\u20a6)<input id="fp" type="number" min="0"></label><label>Old price (\u20a6)<input id="fw" type="number" min="0"></label><label>Label<select id="ft"><option value="">None</option><option>New</option><option>Back in stock</option><option>Sale</option><option>Sold out</option></select></label></div><small class="hint" id="dn"></small></div>'
++'<div class="sc"><h3>Details</h3><label>Fabric<input id="ff" placeholder="e.g. Ankara"></label><label class="gap">Description<textarea id="fd" placeholder="A short description customers will see on the product page"></textarea></label><small class="hint" id="dc"></small></div>'
++'<datalist id="cl">'+cats.map(function(c){return '<option>'+esc(c)+'</option>'}).join('')+'</datalist>'
++'<div class="sc"><h3>Pictures</h3><div class="g4" id="ps"></div><small class="hint">The first picture is the main one shown in the shop. Use Make main to move a picture to first place.</small></div>'
++'<div class="mf"><div class="msg" id="em"></div><button class="b" id="cc2">Cancel</button><button class="btn" id="sp" style="margin:0">Save product</button></div>';
+$('fn').value=W.n;$('fc').value=W.c;$('fg').value=W.g||'F';$('fp').value=W.p||'';$('fw').value=W.was||'';$('ft').value=W.tag||'';$('ff').value=W.f||'';$('fd').value=W.d||'';slots();note();$('md').hidden=false;$('md').scrollTop=0}
+function slots(){$('ps').innerHTML=W.img.map(function(p,k){return '<div class="pt'+(k?'':' m')+'"><div class="sl">'+(k?'Picture '+(k+1):'Main picture')+'</div><div class="im'+(p?'':' e')+'" style="background-image:'+pic(p)+'">'+(p?'':'No picture')+'</div><div class="pb"><label class="b">'+(p?'Replace':'Add')+'<input type="file" accept="image/*" data-u="'+k+'" hidden></label>'+(k&&p?'<button class="b" data-m="'+k+'">Make main</button>':'')+(p?'<button class="b dg" data-r="'+k+'">Remove</button>':'')+'</div></div>'}).join('')}
+function note(){var p=+$('fp').value,w=+$('fw').value;$('dn').textContent=w>p&&p>0?'Shows as '+Math.round((1-p/w)*100)+'% off':(w&&w<=p?'The old price should be higher than the price.':'Leave the old price blank if there is no discount.');$('dc').textContent=$('fd').value.length+' characters'}
+function shrink(f){return new Promise(function(res){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var s=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.85));URL.revokeObjectURL(u)};im.src=u})}
+$('ed').oninput=note;
+$('ed').onchange=async function(e){var k=e.target.dataset.u;if(k==null||!e.target.files[0])return;k=+k;var em=$('em');em.textContent='Uploading picture '+(k+1)+'…';
+var b=await shrink(e.target.files[0]),slug=(cl($('fn').value)||'item').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'item',path='images/products/'+slug+'-'+(k+1)+'-'+Date.now()+'.jpg';
+var r=await gh('contents/'+path,{method:'PUT',body:JSON.stringify({message:'Admin: add product picture',content:b.split(',')[1]})});
+if(!r.ok){em.textContent='Upload failed. Try a smaller picture.';return}
+PRE[path]=b;W.img[k]=path;em.textContent='Picture added. Press Save product, then Publish changes.';slots()};
+$('ed').onclick=function(e){var a=e.target.dataset,t=e.target.id;
+if(a.m!=null){var k=+a.m,x=W.img[0];W.img[0]=W.img[k];W.img[k]=x;slots()}
+if(a.r!=null){W.img[+a.r]='';slots()}
+if(t==='cc'||t==='cc2')$('md').hidden=true;
+if(t==='sp'){var n=cl($('fn').value);if(!n){$('em').textContent='Please add a name.';return}
+W.n=n;W.c=cl($('fc').value)||'Other';W.g=$('fg').value;W.p=+$('fp').value||0;W.f=cl($('ff').value);W.d=cl($('fd').value);var w=+$('fw').value,tg=$('ft').value;
+if(w)W.was=w;else delete W.was;if(tg)W.tag=tg;else delete W.tag;if(!W.d)delete W.d;
+if(cur<0)S.products.push(W);else S.products[cur]=W;dirty=true;$('md').hidden=true;render()}};
+$('pub').onclick=async function(){say('Publishing…');
+document.querySelectorAll('[data-w]').forEach(function(t){var k=t.dataset.w;if(t.value!==DEF[k])S.text[k]=t.value;else delete S.text[k]});
+var body={message:'Admin: update products and wording',content:btoa(unescape(encodeURIComponent('var STORE='+JSON.stringify(S)+';\n')))};if(SHA)body.sha=SHA;
+var r=await gh('contents/data/store.js',{method:'PUT',body:JSON.stringify(body)});
+if(!r.ok){say(r.status===409||r.status===422?'Someone else changed the site. Reload this page and try again.':'Could not publish (error '+r.status+').');return}
+SHA=(await r.json()).content.sha;dirty=false;render();say('Published. The live site updates in about a minute.')};
+})();
+</script></body></html>
