@@ -2,7 +2,7 @@
    ✏️ EDIT HERE FIRST: your brand details. Search for ✏️ and 🖼️ to find every place to edit.
    ===================================================================== */
 var BRAND='Halima Stitches';                 /* ✏️ EDIT: brand name (also change it in the HTML files with Find & Replace, Ctrl+H) */
-var WA='2340000000000';                  /* ✏️ EDIT: WhatsApp number, country code first, no + or spaces */
+var WA='2347026973893';                  /* ✏️ EDIT: WhatsApp number, country code first, no + or spaces */
 var INSTAGRAM='@halima_stitches01';             /* ✏️ EDIT: Instagram handle */
 var ADDR='Your Street Address, Area, City, State, Nigeria'; /* ✏️ EDIT: studio address for fittings */
 var HOURS='Mon–Sat, 10am–6pm';           /* ✏️ EDIT: opening hours */

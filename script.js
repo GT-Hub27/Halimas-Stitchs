@@ -5,7 +5,7 @@ var P=PRODUCTS,pg=document.body.dataset.page,cat='All';
 function naira(n){return '₦'+n.toLocaleString('en-NG')}
 function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function bgOf(x,k){k=k||0;var m=(x.img||[])[k];return m?'url("'+m+'") center/cover no-repeat':'linear-gradient('+(155+k*40)+'deg,hsl('+((x.h+k*20)%360)+' 55% '+(62-k*5)+'%),hsl('+((x.h+30+k*20)%360)+' 50% 28%))'}
+function bgOf(x,k){k=k||0;var m=(x.img||[])[k];return m?"url('"+encodeURI(m)+"') center/cover no-repeat":'linear-gradient('+(155+k*40)+'deg,hsl('+((x.h+k*20)%360)+' 55% '+(62-k*5)+'%),hsl('+((x.h+30+k*20)%360)+' 50% 28%))'}
 function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
