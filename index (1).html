@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- ✏️ EDIT: text shown in the browser tab -->
+<title>Maison Nova — Modern African Fashion</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+<div id="hdr"></div>
+<main>
+<!-- ✏️ EDIT TEXT: hero headline, paragraph and the two buttons -->
+<div class="wrap hero">
+<div>
+<h1 data-k="Home headline">Dressed in<br>heritage, cut<br>for today.</h1>
+<p data-k="Home intro">Handcrafted pieces made from bold African prints and fine fabrics, tailored to you in small batches.</p>
+<a class="btn" href="shop.html">Shop the collection</a><a class="btn o" href="book.html">Book a fitting</a>
+</div>
+<!-- 🖼️ IMAGE: set HERO_IMAGE in config.js -->
+<div class="art" id="heroimg" role="img" aria-label="Hero photo"></div>
+</div>
+
+<div class="wrap sec"><!-- ✏️ EDIT TEXT: the three big shop tiles -->
+<div class="tiles"><a class="tile" href="women.html" style="--a:#d9b38c;--b:#8a5a2b">Women<span>Dresses, tops and sets</span></a><a class="tile" href="men.html" style="--a:#3b5b8a;--b:#14233a">Men<span>Native wear, shirts and trousers</span></a><a class="tile" href="accessories.html?t=F" style="--a:#c9973f;--b:#5a3a10">Accessories<span>Male, female and unisex</span></a></div></div>
+
+<!-- ✏️ EDIT TEXT: home page recent collection heading and tagline. Which categories show is set by RCATS in script.js -->
+<div class="wrap sec" id="recent">
+<h2>Recent collection</h2>
+<p class="sub" data-k="Recent collection tagline">Women, men and accessories, fresh off the sewing table. Made to order, in small batches.</p>
+<div id="rsec"></div>
+<div style="text-align:center;margin-top:28px"><a class="btn" href="shop.html">View the full collection</a></div>
+</div>
+
+<!-- ✏️ EDIT TEXT: short custom design card on the home page -->
+<div class="wrap sec" id="custom">
+<div class="tz"><div><h2>Custom design</h2><p class="sub" data-k="Custom design teaser" style="margin:6px 0 0">Have something specific in mind? We’ll design and sew it just for you.</p></div><a class="btn" href="design.html">Design your piece →</a></div>
+</div>
+
+<!-- ✏️ EDIT TEXT: flash sale bar. Change data-text to change the message. It is hidden for now: delete the word hidden below to show it -->
+<div class="fs" hidden aria-label="Flash sales coming soon"><div class="fst" id="fst" data-text="Flash sales coming soon ✦ Stay tuned"></div></div>
+
+<!-- ✏️ EDIT TEXT: short story teaser. The full story is in story.html -->
+<section class="story"><div class="wrap rv"><h2>Our story</h2><p data-k="Story teaser">Maison Nova began with a simple idea: clothing that carries where you come from and fits how you live. Replace this with the brand’s own story.</p><a class="btn" href="story.html">Read our story</a></div></section>
+</main>
+<div id="ftr"></div>
+<script src="config.js"></script>
+<script src="products.js"></script>
+<script src="products-extra.js"></script>
+<script src="data/store.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
