@@ -171,3 +171,24 @@ footer{padding-left:16px;padding-right:16px}
 .tiles{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:8px 6px;margin:-8px -6px}
 .tiles::-webkit-scrollbar{display:none}
 .tiles .tile{flex:1 0 min(78vw,300px);scroll-snap-align:start}
+/* tile arrows and a smaller, softer Add to bag button */
+.tw{position:relative}
+.tw .ar{position:absolute;top:50%;transform:translateY(-50%);z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.tw .al{left:8px}.tw .arr{right:8px}
+.tw.no .ar{display:none}
+.grid .card .r{gap:8px}
+.grid .card button{width:auto;min-width:62px;height:30px;padding:0 13px;font-size:12.5px;font-weight:500;letter-spacing:.02em;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:999px;transition:background .2s,color .2s}
+.grid .card button:hover{background:var(--accent);color:var(--accent-fg)}
+.info .btn{padding:10px 22px;font-size:15px}
+@media(max-width:520px){.grid .card .r span{font-size:14px}.grid .card button{padding:0 11px;font-size:12px}.t2{display:none}.info .btn{padding:9px 18px;font-size:14px}}
+/* keep the Add to bag text on one line; use the short "Add" on narrower cards */
+.grid .card button{white-space:nowrap;flex:none}
+.grid .card .r span{white-space:nowrap}
+@media(max-width:900px){.t2{display:none}.grid .card button{min-width:56px;padding:0 12px}}
+/* flash sale bar: endless scroll, left to right */
+.fs{overflow:hidden;background:var(--accent);color:var(--accent-fg);padding:9px 0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.fst{display:inline-block;animation:fsr 30s linear infinite}.fst span{padding:0 28px}
+.fs:hover .fst{animation-play-state:paused}
+@keyframes fsr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.fst{animation:none}}\
+[hidden]{display:none!important}

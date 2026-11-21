@@ -43,7 +43,7 @@ return '<div class="li"><span>'+n+' × '+x.n+(a[1]?' · '+a[1]:'')+'<br><span st
 msg+='Total: '+naira(t);$('tt').textContent=naira(t);$('bc').textContent=q;$('wa').href=k.length?'https://wa.me/'+WA+'?text='+encodeURIComponent(msg):'#'}
 
 /* ---------- product cards (open the product page when clicked) ---------- */
-function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'"></div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+naira(x.p)+'</span><button data-a="'+i+'">Add to bag</button></div></div></div>'}
+function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'"></div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+naira(x.p)+'</span><button data-a="'+i+'">Add<span class="t2"> to bag</span></button></div></div></div>'}
 var at=new URLSearchParams(location.search).get('t')||'F';
 function inScope(x){if(pg==='women')return x.c!=='Accessories'&&x.g!=='M';if(pg==='men')return x.c!=='Accessories'&&x.g!=='F';if(pg==='accessories')return x.c==='Accessories'&&x.g===at;return true}
 function tabs(){if(pg==='accessories'){$('tabs').innerHTML=ACCS.map(function(c){return '<button data-t="'+c[0]+'"'+(c[0]===at?' class="on"':'')+'>'+c[1]+'</button>'}).join('');return}
@@ -52,7 +52,7 @@ function shop(){$('grid').innerHTML=P.map(function(x,i){return inScope(x)&&(pg==
 document.addEventListener('click',function(e){var t=e.target,m;
 if((m=t.closest('[data-a]'))){var x=P[+m.dataset.a];addBag(+m.dataset.a,sizes(x).length?'M':'');openBag();return}
 if((m=t.closest('[data-r]'))){var k=m.dataset.r;if(--bag[k]<1)delete bag[k];sv('mn_bag',bag);renderBag();return}
-if((m=t.closest('[data-d]'))){var r=m.closest('.rs').querySelector('.hs');r.scrollBy({left:m.dataset.d*r.clientWidth*.8,behavior:'smooth'});return}
+if((m=t.closest('[data-d]'))){var r=m.closest('.rs,.tw').querySelector('.hs,.tiles');r.scrollBy({left:m.dataset.d*r.clientWidth*.8,behavior:'smooth'});return}
 if((m=t.closest('#tabs [data-t]'))){at=m.dataset.t;tabs();shop();return}
 if((m=t.closest('#tabs [data-c]'))){cat=m.dataset.c;tabs();shop();return}
 if((m=t.closest('.card[data-i]'))){location.href='product.html?id='+m.dataset.i}
@@ -166,5 +166,11 @@ dview();
 document.querySelectorAll('.addr').forEach(function(e){e.textContent=ADDR});
 $('mp').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ADDR);
 if(HERO_IMAGE)$('heroimg').style.background='url("'+HERO_IMAGE+'") center/cover no-repeat';
+/* arrows for the Women / Men / Accessories tile row */
+document.querySelectorAll('.tiles').forEach(function(t){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);w.insertAdjacentHTML('beforeend','<button class="ar al" data-d="-1" aria-label="Scroll left">‹</button><button class="ar arr" data-d="1" aria-label="Scroll right">›</button>');
+function chk(){w.classList.toggle('no',t.scrollWidth<=t.clientWidth+4)}chk();addEventListener('resize',chk)});
+/* flash sale bar: repeats the message so it can scroll without end */
+(function(){var f=$('fst'),t=f.dataset.text;if(t){var u='<span>⚡ '+t+'</span>',h='';for(var n=0;n<16;n++)h+=u;f.innerHTML=h}})();
 renderBag();
 })();
+
