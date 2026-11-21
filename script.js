@@ -10,11 +10,13 @@ function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
 /* ---------- header, side menu, contact footer, bag (shared on every page) ---------- */
+var logoHtml=LOGO?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
 var user=ld('mn_user',null);
-var LINKS=[['index.html','Home','home'],['shop.html','Shop','shop'],['design.html','Custom design','design'],['story.html','Our story','story'],['book.html','Book a fitting','book']];
-function nav(){return LINKS.map(function(l){return '<a href="'+l[0]+'"'+(pg===l[2]?' class="cur"':'')+'>'+l[1]+'</a>'}).join('')}
+var LINKS=[['index.html','Home','home'],['women.html','Women','women'],['men.html','Men','men'],['accessories.html?t=F','Accessories','accessories'],['design.html','Custom design','design'],['story.html','Our story','story'],['book.html','Book a fitting','book']];
+var ACCS=[['M','Male accessories'],['F','Female accessories'],['U','Unisex accessories']];
+function nav(side){return LINKS.map(function(l){var a='<a href="'+l[0]+'"'+(pg===l[2]?' class="cur"':'')+'>'+l[1]+'</a>';if(l[2]!=='accessories')return a;var m=ACCS.map(function(c){return '<a href="accessories.html?t='+c[0]+'">'+c[1]+'</a>'}).join('');return side?a+'<div class="sub2">'+m+'</div>':'<span class="dd">'+a+'<span class="ddm">'+m+'</span></span>'}).join('')}
 var acct=user?'Sign out':'Sign in';
-$('hdr').innerHTML='<header><div class="wrap"><a class="logo" href="index.html">'+BRAND+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a><button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button><button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+BRAND+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav()+'<a href="signin.html" id="acc2">'+acct+'</a></div></aside>';
+$('hdr').innerHTML='<header><div class="wrap"><a class="logo" href="index.html">'+logoHtml+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a><button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button><button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+logoHtml+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav(1)+'<a href="signin.html" id="acc2">'+acct+'</a></div></aside>';
 /* ✏️ EDIT TEXT: the contact block that appears at the bottom of every page (details come from config.js) */
 $('ftr').innerHTML='<section class="wrap sec" id="contact"><h2>Contact us</h2><p class="sub">Questions, custom orders or bulk requests? We’d love to hear from you.</p><div class="cols"><div><b>WhatsApp</b><br><a href="https://wa.me/'+WA+'" target="_blank" rel="noopener">Chat with us</a></div><div><b>Instagram</b><br>'+INSTAGRAM+'</div><div><b>Studio</b><br>'+ADDR+'<br>'+HOURS+'</div></div></section><footer>© '+new Date().getFullYear()+' '+BRAND+'. All rights reserved.</footer>'+"<aside id=\"dr\" aria-label=\"Shopping bag\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\"><h2 style=\"font-size:28px\">Your bag</h2><button class=\"bagbtn\" id=\"cl\">Close</button></div>\n<div id=\"dl\"></div>\n<div style=\"padding-top:12px\"><div class=\"li\" style=\"border:0;font-weight:500\"><span>Total</span><span id=\"tt\">\u20a60</span></div>\n<a class=\"btn\" id=\"wa\" href=\"#\" target=\"_blank\" rel=\"noopener\" style=\"display:block;text-align:center;margin-top:6px\">Order on WhatsApp</a></div>\n</aside>";
 function signout(e){if(user){e.preventDefault();try{localStorage.removeItem('mn_user')}catch(x){}location.reload()}}
@@ -24,6 +26,13 @@ $('mb').onclick=function(){menu(true)};$('sx').onclick=$('ov').onclick=function(
 function openBag(){$('dr').classList.add('open')}
 $('bb').onclick=openBag;$('cl').onclick=function(){$('dr').classList.remove('open')};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){menu(false);$('dr').classList.remove('open')}});
+
+/* ---------- sign-in gate: orders, fittings and custom designs need an account ---------- */
+document.body.insertAdjacentHTML('beforeend','<div id="gate" class="gate" hidden><div class="gbox"><button class="gx" id="gx" aria-label="Close">✕</button><h3>Sign in to continue</h3><p class="sub">Please sign in or create an account to place an order, book a fitting or request a custom design.</p><a class="btn" href="signin.html">Sign in</a> <a class="btn o" href="signin.html?m=up" style="margin-left:6px">Sign up</a></div></div>');
+function showGate(){var u=location.pathname.split('/').pop()||'index.html';sv('mn_next',u+location.search);$('gate').hidden=false}
+$('gx').onclick=function(){$('gate').hidden=true};
+document.addEventListener('click',function(e){if(user)return;if(e.target.closest('#wa,#pwa,#bgo,#dgo,a[href^="design.html"],a[href^="book.html"]')){e.preventDefault();e.stopPropagation();showGate()}},true);
+if(!user&&(pg==='design'||pg==='book'))showGate();
 
 /* ---------- bag (kept between pages) ---------- */
 var bag=ld('mn_bag',{});
@@ -35,37 +44,41 @@ msg+='Total: '+naira(t);$('tt').textContent=naira(t);$('bc').textContent=q;$('wa
 
 /* ---------- product cards (open the product page when clicked) ---------- */
 function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'"></div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+naira(x.p)+'</span><button data-a="'+i+'">Add to bag</button></div></div></div>'}
-function tabs(){var cs=['All'].concat(P.map(function(x){return x.c}).filter(function(v,i,a){return a.indexOf(v)===i}));$('tabs').innerHTML=cs.map(function(c){return '<button data-c="'+c+'"'+(c===cat?' class="on"':'')+'>'+c+'</button>'}).join('')}
-function shop(){$('grid').innerHTML=P.map(function(x,i){return (cat==='All'||x.c===cat)?cardHtml(i):''}).join('')}
+var at=new URLSearchParams(location.search).get('t')||'F';
+function inScope(x){if(pg==='women')return x.c!=='Accessories'&&x.g!=='M';if(pg==='men')return x.c!=='Accessories'&&x.g!=='F';if(pg==='accessories')return x.c==='Accessories'&&x.g===at;return true}
+function tabs(){if(pg==='accessories'){$('tabs').innerHTML=ACCS.map(function(c){return '<button data-t="'+c[0]+'"'+(c[0]===at?' class="on"':'')+'>'+c[1]+'</button>'}).join('');return}
+var cs=['All'].concat(P.filter(inScope).map(function(x){return x.c}).filter(function(v,i,a){return a.indexOf(v)===i}));$('tabs').innerHTML=cs.map(function(c){return '<button data-c="'+c+'"'+(c===cat?' class="on"':'')+'>'+c+'</button>'}).join('')}
+function shop(){$('grid').innerHTML=P.map(function(x,i){return inScope(x)&&(pg==='accessories'||cat==='All'||x.c===cat)?cardHtml(i):''}).join('')}
 document.addEventListener('click',function(e){var t=e.target,m;
 if((m=t.closest('[data-a]'))){var x=P[+m.dataset.a];addBag(+m.dataset.a,sizes(x).length?'M':'');openBag();return}
 if((m=t.closest('[data-r]'))){var k=m.dataset.r;if(--bag[k]<1)delete bag[k];sv('mn_bag',bag);renderBag();return}
 if((m=t.closest('[data-d]'))){var r=m.closest('.rs').querySelector('.hs');r.scrollBy({left:m.dataset.d*r.clientWidth*.8,behavior:'smooth'});return}
+if((m=t.closest('#tabs [data-t]'))){at=m.dataset.t;tabs();shop();return}
 if((m=t.closest('#tabs [data-c]'))){cat=m.dataset.c;tabs();shop();return}
 if((m=t.closest('.card[data-i]'))){location.href='product.html?id='+m.dataset.i}
 });
 
 /* ---------- home page: recent collection rows (✏️ EDIT: which categories show) ---------- */
-var RCATS=['Dresses','Tops','Accessories'];
-$('rsec').innerHTML=RCATS.map(function(c){var ids=[];P.forEach(function(x,i){if(x.c===c)ids.push(i)});
-return '<div class="rs"><div class="rh"><h3>'+c+'</h3><div class="rc"><a href="shop.html?c='+c+'">See all '+c.toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(0,5).map(cardHtml).join('')+'</div></div>'}).join('');
+var ROWS=[['Women','women.html',function(x){return x.c!=='Accessories'&&x.g!=='M'}],['Men','men.html',function(x){return x.c!=='Accessories'&&x.g!=='F'}],['Accessories','accessories.html?t=F',function(x){return x.c==='Accessories'}]];
+$('rsec').innerHTML=ROWS.map(function(r){var ids=[];P.forEach(function(x,i){if(r[2](x))ids.push(i)});
+return '<div class="rs"><div class="rh"><h3>'+r[0]+'</h3><div class="rc"><a href="'+r[1]+'">See all '+r[0].toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(0,5).map(cardHtml).join('')+'</div></div>'}).join('');
 
 /* ---------- shop page ---------- */
-if(pg==='shop'){var qc=new URLSearchParams(location.search).get('c');if(qc)cat=qc;tabs();shop()}
+if(pg==='women'||pg==='men'||pg==='accessories'){tabs();shop()}
 
 /* ---------- product page ---------- */
 if(pg==='product'){
 var pi=+new URLSearchParams(location.search).get('id'),px0=P[pi]||P[0];pi=P.indexOf(px0);
-var sz=sizes(px0),sel=sz.length?'M':'',qty=1;
+var sz=sizes(px0),sel=sz.length?'M':'',qty=1,bk=px0.c==='Accessories'?'accessories.html?t='+px0.g:px0.g==='M'?'men.html':'women.html';
 document.title=px0.n+' | '+BRAND;
 var wl=function(){return 'https://wa.me/'+WA+'?text='+encodeURIComponent('Hello '+BRAND+', I\u2019d like to order '+qty+' × '+px0.n+(sel?' (size '+sel+')':'')+' ('+naira(px0.p*qty)+').')};
-var rel=[];P.forEach(function(x,i){if(x.c===px0.c&&i!==pi)rel.push(i)});
-$('pd').innerHTML='<a class="back" href="shop.html">← Back to the shop</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+'</div><h1>'+px0.n+'</h1><div class="pr">'+naira(px0.p)+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
+var rel=[];P.forEach(function(x,i){if(x.c===px0.c&&x.g===px0.g&&i!==pi)rel.push(i)});
+$('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+(px0.g==='M'?' · Men':px0.g==='F'?' · Women':' · Unisex')+'</div><h1>'+px0.n+'</h1><div class="pr">'+naira(px0.p)+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
 (sz.length?'<label class="sub" style="margin:0">Size</label><div class="sz" id="szs">'+sz.map(function(s){return '<button data-s="'+s+'" class="'+(s===sel?'on':'')+'">'+s+'</button>'}).join('')+'</div>':'')+
-'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><div class="qty"><button data-q="-1" aria-label="Fewer">−</button><span id="qv">1</span><button data-q="1" aria-label="More">+</button></div><button class="btn" id="pa">Add to bag</button><a class="btn o" id="pw" target="_blank" rel="noopener" style="margin:0">Order on WhatsApp</a></div>'+
+'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><div class="qty"><button data-q="-1" aria-label="Fewer">−</button><span id="qv">1</span><button data-q="1" aria-label="More">+</button></div><button class="btn" id="pa">Add to bag</button><a class="btn o" id="pwa" target="_blank" rel="noopener" style="margin:0">Order on WhatsApp</a></div>'+
 '<dl class="dt"><div><dt>Fabric</dt><dd>'+(px0.f||'Quality fabric')+'</dd></div><div><dt>Sizes</dt><dd>'+(sz.length?sz.join(', ')+', or made to your measurements':'One size')+'</dd></div><div><dt>Care</dt><dd>Hand wash cold or dry clean. Iron on a low heat.</dd></div><div><dt>Delivery</dt><dd>Made to order. Timelines are confirmed with you on WhatsApp.</dd></div></dl></div></div>'+
 (rel.length?'<h2>You may also like</h2><div class="grid" style="margin-top:18px">'+rel.slice(0,4).map(cardHtml).join('')+'</div>':'');
-var upd=function(){$('qv').textContent=qty;$('pw').href=wl()};upd();
+var upd=function(){$('qv').textContent=qty;$('pwa').href=wl()};upd();
 $('pd').addEventListener('click',function(e){var t=e.target,m;
 if((m=t.closest('[data-k]'))){var g=$('gmain');g.style.opacity=0;setTimeout(function(){g.style.background=bgOf(px0,+m.dataset.k);g.style.opacity=1},150);document.querySelectorAll('.th button').forEach(function(b){b.classList.toggle('on',b===m)})}
 if((m=t.closest('[data-s]'))){sel=m.dataset.s;document.querySelectorAll('#szs button').forEach(function(b){b.classList.toggle('on',b===m)});upd()}
@@ -86,6 +99,7 @@ var mode='in',pend=null,code=null,exp=0,tm=null;
 var normPhone=function(v){var d=v.replace(/\D/g,'');if(/^0[789][01]\d{8}$/.test(d))return '234'+d.slice(1);if(/^234[789][01]\d{8}$/.test(d))return d;return ''};
 var hx=async function(s){try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}catch(e){return btoa(unescape(encodeURIComponent(s)))}};
 $('atabs').onclick=function(e){var m=e.target.dataset.m;if(!m)return;mode=m;document.querySelectorAll('#atabs button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m)});$('cfl').hidden=m==='in';$('am').textContent=''};
+if(new URLSearchParams(location.search).get('m')==='up')document.querySelector('#atabs [data-m="up"]').click();
 $('ago').onclick=async function(){var m=$('am'),p=normPhone($('ph').value),pw=$('pw').value,us=ld('mn_users',{});
 if(!p){m.textContent='Enter a valid Nigerian phone number, for example 0803 123 4567.';return}
 if(pw.length<(mode==='up'?8:1)){m.textContent=mode==='up'?'Use a password of at least 8 characters.':'Enter your password.';return}
@@ -104,7 +118,7 @@ if(OTP_VERIFY_URL){try{var r=await fetch(OTP_VERIFY_URL,{method:'POST',headers:{
 else ok=OTP_DEMO&&v===code&&Date.now()<exp;
 if(!ok){m.textContent='That code isn\u2019t right or has expired. Please try again.';return}
 if(mode==='up'){var us=ld('mn_users',{});us[pend.p]=pend.h;sv('mn_users',us)}
-sv('mn_user',{p:pend.p});location.href='index.html'};
+sv('mn_user',{p:pend.p});var nx=ld('mn_next','index.html');try{localStorage.removeItem('mn_next')}catch(x){}location.href=/^[a-z]+\.html(\?.*)?$/.test(nx)?nx:'index.html'};
 $('rsd').onclick=sendOtp;$('abk').onclick=function(){$('s1').hidden=false;$('s2').hidden=true};
 }
 
