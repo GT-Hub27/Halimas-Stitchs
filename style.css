@@ -167,3 +167,7 @@ body.lock{overflow:hidden}
 /* side space on every screen size */
 .wrap,.wrap.sec,.wrap.hero{padding-left:clamp(16px,5vw,56px);padding-right:clamp(16px,5vw,56px)}
 footer{padding-left:16px;padding-right:16px}
+/* Women / Men / Accessories tiles: one swipeable row */
+.tiles{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:8px 6px;margin:-8px -6px}
+.tiles::-webkit-scrollbar{display:none}
+.tiles .tile{flex:1 0 min(78vw,300px);scroll-snap-align:start}
