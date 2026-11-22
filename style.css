@@ -198,3 +198,8 @@ footer{padding-left:16px;padding-right:16px}
 
 .sw{position:relative}.tg{position:absolute;top:10px;left:10px;font-style:normal;background:var(--accent);color:var(--accent-fg);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
 .was{color:var(--muted);font-size:.85em;margin-right:4px}
+
+
+.grid .card .r span{display:flex;flex-direction:column-reverse;line-height:1.2;min-width:0}
+.grid .card .r .was{font-size:11px;margin:0}
+.grid .card .r button{flex:none}
