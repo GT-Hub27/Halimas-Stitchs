@@ -69,7 +69,7 @@ var $=function(i){return document.getElementById(i)};
 var O,R,T,S={products:null,text:{}},SHA=null,dirty=false,cur=-1,W=null,DEF={},PRE={};
 var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')};
 var cl=function(s){return String(s).replace(/[<>]/g,'').trim()};
-function gh(p,o){return fetch('https://api.github.com/repos/'+O+'/'+R+'/'+p,Object.assign({},o||{},{headers:{Authorization:'Bearer '+T,Accept:'application/vnd.github+json'}}))}
+function gh(p,o){return fetch('https://api.github.com/repos/'+O+'/'+R+(p?'/'+p:''),Object.assign({},o||{},{headers:{Authorization:'Bearer '+T,Accept:'application/vnd.github+json'}}))}
 function say(t){$('am').textContent=t}
 function pic(p){return p?"url('"+encodeURI(PRE[p]||p)+"')":'none'}
 try{var sv=JSON.parse(localStorage.getItem('ad_cfg')||'null');if(sv){$('o').value=sv.o;$('r').value=sv.r;$('k').value=sv.k;$('rm').checked=true}}catch(e){}
@@ -78,7 +78,7 @@ $('go').onclick=async function(){O=$('o').value.trim();R=$('r').value.trim();T=$
 try{var r=await gh('');if(!r.ok){m.textContent='That key or repository was not accepted. Check the details.';return}
 var j=await r.json();if(!j.permissions||!j.permissions.push){m.textContent='This key can’t edit the site. Ask the owner for write access.';return}
 try{if($('rm').checked)localStorage.setItem('ad_cfg',JSON.stringify({o:O,r:R,k:T}));else localStorage.removeItem('ad_cfg')}catch(e){}
-await load();$('login').hidden=true;$('app').hidden=false;render()}catch(e){m.textContent='Could not connect. Check your internet and try again.'}};
+await load();$('login').hidden=true;$('app').hidden=false;render()}catch(e){m.textContent='Could not connect ('+(e&&e.message?e.message:'unknown error')+'). Check your internet and try again.'}};
 async function load(){var r=await gh('contents/data/store.js');
 if(r.ok){var j=await r.json();SHA=j.sha;var t=decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));try{S=JSON.parse(t.slice(t.indexOf('=')+1,t.lastIndexOf(';')))}catch(e){S={}}}
 S.products=S.products||JSON.parse(JSON.stringify(PRODUCTS));S.text=S.text||{};
@@ -129,3 +129,5 @@ if(!r.ok){say(r.status===409||r.status===422?'Someone else changed the site. Rel
 SHA=(await r.json()).content.sha;dirty=false;render();say('Published. The live site updates in about a minute.')};
 })();
 </script></body></html>
+
+
