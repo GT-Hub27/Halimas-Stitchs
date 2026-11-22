@@ -200,6 +200,7 @@ footer{padding-left:16px;padding-right:16px}
 .was{color:var(--muted);font-size:.85em;margin-right:4px}
 
 
-.grid .card .r span{display:flex;flex-direction:column-reverse;line-height:1.2;min-width:0}
+.grid .card .r>span{display:flex;flex-direction:column-reverse;line-height:1.2;min-width:0}
+.grid .card .r button span{display:inline}
 .grid .card .r .was{font-size:11px;margin:0}
 .grid .card .r button{flex:none}
