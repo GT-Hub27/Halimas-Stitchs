@@ -77,7 +77,7 @@ $('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><d
 (rel.length?'<h2>You may also like</h2><div class="grid" style="margin-top:18px">'+rel.slice(0,4).map(cardHtml).join('')+'</div>':'');
 var upd=function(){$('qv').textContent=qty;$('pwa').href=wl()};upd();
 $('pd').addEventListener('click',function(e){var t=e.target,m;
-if((m=t.closest('[data-k]'))){var g=$('gmain');g.style.opacity=0;setTimeout(function(){g.style.background=bgOf(px0,+m.dataset.k);g.style.opacity=1},150);document.querySelectorAll('.th button').forEach(function(b){b.classList.toggle('on',b===m)})}
+if((m=t.closest('[data-k]'))){var g=$('gmain');var kk=+m.dataset.k;g.style.opacity=0;setTimeout(function(){g.style.background=bgOf(px0,kk);g.style.opacity=1},150);document.querySelectorAll('.th button').forEach(function(b){b.classList.toggle('on',b===m)})}
 if((m=t.closest('[data-s]'))){sel=m.dataset.s;document.querySelectorAll('#szs button').forEach(function(b){b.classList.toggle('on',b===m)});upd()}
 if((m=t.closest('[data-q]'))){qty=Math.max(1,Math.min(20,qty+ +m.dataset.q));upd()}
 if(t.id==='pa'){addBag(pi,sel,qty);openBag()}});
