@@ -1,4 +1,4 @@
-/* Shared script for every page. Page-specific parts run only on their own page. */
+
 (function(){
 var $=function(i){return document.getElementById(i)||document.createElement('div')};
 if(typeof STORE!=='undefined'&&STORE.products&&STORE.products.length)PRODUCTS=STORE.products;
@@ -11,7 +11,6 @@ function bgOf(x,k){k=k||0;var m=(x.img||[])[k];return m?"url('"+encodeURI(m)+"')
 function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
-/* ---------- header, side menu, contact footer, bag (shared on every page) ---------- */
 var logoHtml=(typeof LOGO!=='undefined'&&LOGO)?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
 var user=ld('mn_user',null);
 var LINKS=[['index.html','Home','home'],['women.html','Women','women'],['men.html','Men','men'],['accessories.html?t=F','Accessories','accessories'],['design.html','Custom design','design'],['story.html','Our story','story'],['book.html','Book a fitting','book']];
@@ -19,7 +18,7 @@ var ACCS=[['M','Male accessories'],['F','Female accessories'],['U','Unisex acces
 function nav(side){return LINKS.map(function(l){var a='<a href="'+l[0]+'"'+(pg===l[2]?' class="cur"':'')+'>'+l[1]+'</a>';if(l[2]!=='accessories')return a;var m=ACCS.map(function(c){return '<a href="accessories.html?t='+c[0]+'">'+c[1]+'</a>'}).join('');return side?a+'<div class="sub2">'+m+'</div>':'<span class="dd">'+a+'<span class="ddm">'+m+'</span></span>'}).join('')}
 var acct=user?'Sign out':'Sign in';
 $('hdr').innerHTML='<header><div class="wrap"><a class="logo" href="index.html">'+logoHtml+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a><button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button><button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+logoHtml+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav(1)+'<a href="signin.html" id="acc2">'+acct+'</a></div></aside>';
-/* ✏️ EDIT TEXT: the contact block that appears at the bottom of every page (details come from config.js) */
+
 $('ftr').innerHTML='<section class="wrap sec" id="contact"><h2>Contact us</h2><p class="sub">Questions, custom orders or bulk requests? We’d love to hear from you.</p><div class="cols"><div><b>Email</b><br><a href="mailto:'+MAIL+'">Send us an email</a></div><div><b>Instagram</b><br>'+INSTAGRAM+'</div><div><b>Studio</b><br>'+ADDR+'<br>'+HOURS+'</div></div></section><footer>© '+new Date().getFullYear()+' '+BRAND+'. All rights reserved. · <a href="admin.html">Admin</a></footer>'+"<aside id=\"dr\" aria-label=\"Shopping bag\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\"><h2 style=\"font-size:28px\">Your bag</h2><button class=\"bagbtn\" id=\"cl\">Close</button></div>\n<div id=\"dl\"></div>\n<div style=\"padding-top:12px\"><div class=\"li\" style=\"border:0;font-weight:500\"><span>Total</span><span id=\"tt\">\u20a60</span></div>\n<a class=\"btn\" id=\"wa\" href=\"#\" target=\"_blank\" rel=\"noopener\" style=\"display:block;text-align:center;margin-top:6px\">Order on WhatsApp</a></div>\n</aside>";
 function signout(e){if(user){e.preventDefault();try{localStorage.removeItem('mn_user')}catch(x){}location.reload()}}
 $('acc').onclick=$('acc2').onclick=signout;
@@ -29,14 +28,12 @@ function openBag(){$('dr').classList.add('open')}
 $('bb').onclick=openBag;$('cl').onclick=function(){$('dr').classList.remove('open')};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){menu(false);$('dr').classList.remove('open')}});
 
-/* ---------- sign-in gate: orders, fittings and custom designs need an account ---------- */
 document.body.insertAdjacentHTML('beforeend','<div id="gate" class="gate" hidden><div class="gbox"><button class="gx" id="gx" aria-label="Close">✕</button><h3>Sign in to continue</h3><p class="sub">Please sign in or create an account to place an order, book a fitting or request a custom design.</p><a class="btn" href="signin.html">Sign in</a> <a class="btn o" href="signin.html?m=up" style="margin-left:6px">Sign up</a></div></div>');
 function showGate(){var u=location.pathname.split('/').pop()||'index.html';sv('mn_next',u+location.search);$('gate').hidden=false}
 $('gx').onclick=function(){$('gate').hidden=true};
 document.addEventListener('click',function(e){if(user)return;if(e.target.closest('#wa,#pwa,#bgo,#dgo,a[href^="design.html"],a[href^="book.html"]')){e.preventDefault();e.stopPropagation();showGate()}},true);
 if(!user&&(pg==='design'||pg==='book'))showGate();
 
-/* ---------- bag (kept between pages) ---------- */
 var bag=ld('mn_bag',{});
 function addBag(i,sz,q){var k=i+'|'+(sz||'');bag[k]=(bag[k]||0)+(q||1);sv('mn_bag',bag);renderBag()}
 function renderBag(){var k=Object.keys(bag),t=0,q=0,msg='Hello '+BRAND+', I\u2019d like to order:\n';
@@ -44,7 +41,6 @@ $('dl').innerHTML=k.length?k.map(function(key){var a=key.split('|'),x=P[+a[0]],n
 return '<div class="li"><span>'+n+' × '+x.n+(a[1]?' · '+a[1]:'')+'<br><span style="color:var(--muted)">'+naira(x.p*n)+'</span></span><button data-r="'+key+'">Remove</button></div>'}).join(''):'<p class="sub">Your bag is empty.</p>';
 msg+='Total: '+naira(t);$('tt').textContent=naira(t);$('bc').textContent=q;$('wa').href=k.length?'https://wa.me/'+WA+'?text='+encodeURIComponent(msg):'#'}
 
-/* ---------- product cards (open the product page when clicked) ---------- */
 function cardHtml(i){var x=P[i];return '<div class="card" data-i="'+i+'"><div class="sw" style="background:'+bgOf(x)+'">'+(x.tag?'<i class="tg">'+x.tag+'</i>':'')+'</div><div class="in"><div class="c">'+x.c+'</div><h3>'+x.n+'</h3><div class="r"><span>'+(x.was?'<s class="was">'+naira(x.was)+'</s> ':'')+naira(x.p)+'</span><button data-a="'+i+'">Add<span class="t2"> to bag</span></button></div></div></div>'}
 var at=new URLSearchParams(location.search).get('t')||'F';
 function inScope(x){if(pg==='women')return x.c!=='Accessories'&&x.g!=='M';if(pg==='men')return x.c!=='Accessories'&&x.g!=='F';if(pg==='accessories')return x.c==='Accessories'&&x.g===at;return true}
@@ -60,10 +56,9 @@ if((m=t.closest('#tabs [data-c]'))){cat=m.dataset.c;tabs();shop();return}
 if((m=t.closest('.card[data-i]'))){location.href='product.html?id='+m.dataset.i}
 });
 
-/* ---------- home page: recent collection rows (✏️ EDIT: which categories show) ---------- */
 var ROWS=[['Women','women.html',function(x){return x.c!=='Accessories'&&x.g!=='M'}],['Men','men.html',function(x){return x.c!=='Accessories'&&x.g!=='F'}],['Accessories','accessories.html?t=F',function(x){return x.c==='Accessories'}]];
 $('rsec').innerHTML=ROWS.map(function(r){var ids=[];P.forEach(function(x,i){if(r[2](x))ids.push(i)});
-return '<div class="rs"><div class="rh"><h3>'+r[0]+'</h3><div class="rc"><a href="'+r[1]+'">See all '+r[0].toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(0,5).map(cardHtml).join('')+'</div></div>'}).join('');
+return '<div class="rs"><div class="rh"><h3>'+r[0]+'</h3><div class="rc"><a href="'+r[1]+'">See all '+r[0].toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(-5).reverse().map(cardHtml).join('')+'</div></div>'}).join('');
 
 /* ---------- shop page ---------- */
 if(pg==='women'||pg==='men'||pg==='accessories'){tabs();shop()}
@@ -124,7 +119,8 @@ sv('mn_user',{p:pend.p});var nx=ld('mn_next','index.html');try{localStorage.remo
 $('rsd').onclick=sendOtp;$('abk').onclick=function(){$('s1').hidden=false;$('s2').hidden=true};
 }
 
-/* ---------- booking page and custom design page (form, mannequin, reference picture) ---------- */
+
+
 var bd=$('bd'),td=new Date();bd.min=td.getFullYear()+'-'+String(td.getMonth()+1).padStart(2,'0')+'-'+String(td.getDate()).padStart(2,'0');
 $('bgo').onclick=function(){var n=$('bn').value.trim(),p=$('bp').value.trim(),d=bd.value,m=$('bm');
 if(!n||!p||!d){m.textContent='Please add your name, phone number and a preferred date.';return}
