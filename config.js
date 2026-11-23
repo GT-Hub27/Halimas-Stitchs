@@ -1,7 +1,7 @@
 
 var BRAND='Halima Stitches';                
 var LOGO='';
-var WA='2347026973893';                 
+var WA='234702';                 
 var INSTAGRAM='@halima_stitches01';            
 var ADDR='Your Street Address, Area, City, State, Nigeria';  
 var HOURS='Mon–Sat, 10am–6pm';          
@@ -11,3 +11,5 @@ var HERO_IMAGE='';                       /* 🖼️ IMAGE: big photo on the home
 var OTP_DEMO=true;                       /* ✏️ EDIT */
 var OTP_SEND_URL='';                     /* ✏️ EDIT: your server address that sends the SMS code */
 var OTP_VERIFY_URL='';                   /* ✏️ EDIT: your server address that checks the code */
+var SUPA_URL='';
+var SUPA_KEY='';

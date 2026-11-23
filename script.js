@@ -11,6 +11,9 @@ function bgOf(x,k){k=k||0;var m=(x.img||[])[k];return m?"url('"+encodeURI(m)+"')
 function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
+var VID=ld('mn_vid',null);if(!VID){VID=Math.random().toString(36).slice(2)+Date.now().toString(36);sv('mn_vid',VID)}
+function track(t,d){if(typeof SUPA_URL==='undefined'||!SUPA_URL||typeof SUPA_KEY==='undefined')return;d=d||{};try{fetch(SUPA_URL+'/rest/v1/events',{method:'POST',keepalive:true,headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({vid:VID,type:t,page:pg,item:d.item||null,qty:d.qty||null,total:d.total||null})}).catch(function(){})}catch(e){}}
+
 
 var logoHtml=(typeof LOGO!=='undefined'&&LOGO)?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
 function sld(k){try{var v=sessionStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
@@ -44,7 +47,7 @@ function closeP(){$('promo').hidden=true}
 $('px').onclick=closeP;$('promo').onclick=function(e){if(e.target===this)closeP()};
 setTimeout(function(){if(!(ld('mn_user',null)||sld('mn_user'))&&$('gate').hidden){$('promo').hidden=false;try{sessionStorage.setItem('mn_seen','1')}catch(e){}}},seen?1500:Math.max(0,6e4-(now-t0)))}catch(e){}})();
 var bag=ld('mn_bag',{});
-function addBag(i,sz,q){var k=i+'|'+(sz||'');bag[k]=(bag[k]||0)+(q||1);sv('mn_bag',bag);renderBag()}
+function addBag(i,sz,q){track('add_to_bag',{item:P[i]&&P[i].n,qty:q||1});var k=i+'|'+(sz||'');bag[k]=(bag[k]||0)+(q||1);sv('mn_bag',bag);renderBag()}
 function renderBag(){var k=Object.keys(bag),t=0,q=0,msg='Hello '+BRAND+', I\u2019d like to order:\n';
 $('dl').innerHTML=k.length?k.map(function(key){var a=key.split('|'),x=P[+a[0]],n=bag[key];if(!x)return '';t+=x.p*n;q+=n;msg+='• '+n+' × '+x.n+(a[1]?' (size '+a[1]+')':'')+' ('+naira(x.p*n)+')\n';
 return '<div class="li"><span>'+n+' × '+x.n+(a[1]?' · '+a[1]:'')+'<br><span style="color:var(--muted)">'+naira(x.p*n)+'</span></span><button data-r="'+key+'">Remove</button></div>'}).join(''):'<p class="sub">Your bag is empty.</p>';
@@ -67,7 +70,7 @@ if((m=t.closest('.card[data-i]'))){location.href='product.html?id='+m.dataset.i}
 
 var ROWS=[['Women','women.html',function(x){return x.c!=='Accessories'&&x.g!=='M'}],['Men','men.html',function(x){return x.c!=='Accessories'&&x.g!=='F'}],['Accessories','accessories.html?t=F',function(x){return x.c==='Accessories'}]];
 $('rsec').innerHTML=ROWS.map(function(r){var ids=[];P.forEach(function(x,i){if(r[2](x))ids.push(i)});
-return '<div class="rs"><div class="rh"><h3>'+r[0]+'</h3><div class="rc"><a href="'+r[1]+'">See all '+r[0].toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(-5).reverse().map(cardHtml).join('')+'</div></div>'}).join('');
+return '<div class="rs"><div class="rh"><h3>'+r[0]+'</h3><div class="rc"><a href="'+r[1]+'">See all '+r[0].toLowerCase()+' →</a><button class="ar" data-d="-1" aria-label="Scroll left">‹</button><button class="ar" data-d="1" aria-label="Scroll right">›</button></div></div><div class="grid hs">'+ids.slice(0,5).map(cardHtml).join('')+'</div></div>'}).join('');
 
 /* ---------- shop page ---------- */
 if(pg==='women'||pg==='men'||pg==='accessories'){tabs();shop()}
@@ -76,7 +79,7 @@ if(pg==='women'||pg==='men'||pg==='accessories'){tabs();shop()}
 if(pg==='product'){
 var pi=+new URLSearchParams(location.search).get('id'),px0=P[pi]||P[0];pi=P.indexOf(px0);
 var sz=sizes(px0),sel=sz.length?'M':'',qty=1,bk=px0.c==='Accessories'?'accessories.html?t='+px0.g:px0.g==='M'?'men.html':'women.html';
-document.title=px0.n+' | '+BRAND;
+document.title=px0.n+' | '+BRAND;track('product_view',{item:px0.n});
 var wl=function(){return 'https://wa.me/'+WA+'?text='+encodeURIComponent('Hello '+BRAND+', I\u2019d like to order '+qty+' × '+px0.n+(sel?' (size '+sel+')':'')+' ('+naira(px0.p*qty)+').')};
 var sc=function(i){var x=P[i];return (x.c===px0.c?2:0)+(x.g===px0.g?1:0)+((x.c==='Accessories')===(px0.c==='Accessories')?.5:0)},rel=P.map(function(x,i){return i}).filter(function(i){return i!==pi}).sort(function(a,b){return sc(b)-sc(a)});
 $('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+(px0.g==='M'?' · Men':px0.g==='F'?' · Women':' · Unisex')+'</div><h1>'+px0.n+'</h1><div class="pr">'+(px0.was?'<s class="was">'+naira(px0.was)+'</s> ':'')+naira(px0.p)+(px0.tag?' <i class="tg" style="position:static;vertical-align:middle">'+px0.tag+'</i>':'')+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
@@ -185,5 +188,17 @@ function chk(){w.classList.toggle('no',t.scrollWidth<=t.clientWidth+4)}chk();add
 (function(){var f=$('fst'),t=f.dataset.text;if(t){var u='<span>⚡ '+t+'</span>',h='';for(var n=0;n<16;n++)h+=u;f.innerHTML=h}})();
 /* wording changed in the admin page */
 if(typeof STORE!=='undefined'&&STORE.text)document.querySelectorAll('[data-k]').forEach(function(e){var v=STORE.text[e.dataset.k];if(v==null||v==='')return;if(e.dataset.n!==undefined){e.dataset.n=parseInt(v)||0;return}e.innerHTML=v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')});
+
+try{if(!sessionStorage.getItem('mn_s')){sessionStorage.setItem('mn_s','1');track('visit')}}catch(e){}
+track('page_view');
+document.addEventListener('click',function(e){var x=e.target.closest('#wa,#pwa,#bgo,#dgo');if(!x||!user)return;var id=x.id;
+if(id==='wa'){var q=0,t=0,n=[];Object.keys(bag).forEach(function(k){var p=P[+k.split('|')[0]];if(p){q+=bag[k];t+=p.p*bag[k];n.push(p.n)}});track('order_whatsapp',{qty:q,total:t,item:n.join(', ').slice(0,200)})}
+else if(id==='pwa')track('order_whatsapp',{item:px0.n,qty:qty,total:px0.p*qty});
+else track(id==='bgo'?'fitting_request':'design_request')});
+
+
+
+
+
 renderBag();
 })();

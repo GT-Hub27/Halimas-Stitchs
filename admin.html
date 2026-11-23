@@ -55,11 +55,12 @@
 <div class="msg" id="lm"></div><button class="btn" id="go">Sign in</button>
 </div>
 <div id="app" hidden>
-<div class="bar"><div class="tabs" id="tb"><button class="on" data-t="p">Products</button><button data-t="w">Wording</button></div>
+<div class="bar"><div class="tabs" id="tb"><button class="on" data-t="p">Products</button><button data-t="w">Wording</button><button data-t="a">Activity</button></div>
 <div><span id="st" class="sub" style="margin-right:10px"></span><button class="btn" id="pub" style="margin:0">Publish changes</button> <button class="b" id="so">Sign out</button></div></div>
 <div class="msg" id="am"></div>
 <div id="tp"><div class="bar"><input id="q" placeholder="Search products" style="max-width:260px;margin:0"><button class="b" id="add">+ Add product</button></div><div id="pl"></div></div>
 <div id="tw" hidden></div>
+<div id="ta" hidden></div>
 </div></div>
 <div class="mdl" id="md" hidden><div id="ed"></div></div>
 <script src="config.js"></script><script src="products.js"></script><script src="products-extra.js"></script>
@@ -69,16 +70,23 @@ var $=function(i){return document.getElementById(i)};
 var O,R,T,S={products:null,text:{}},SHA=null,dirty=false,cur=-1,W=null,DEF={},PRE={};
 var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')};
 var cl=function(s){return String(s).replace(/[<>]/g,'').trim()};
-function gh(p,o){return fetch('https://api.github.com/repos/'+O+'/'+R+(p?'/'+p:''),Object.assign({},o||{},{headers:{Authorization:'Bearer '+T,Accept:'application/vnd.github+json'}}))}
-function say(t){$('am').textContent=t}
+function gh(p,o){
+  return fetch('https://api.github.com/repos/'+O+'/'+R+(p?'/'+p:''),Object.assign({},o||{},{headers:{
+    Authorization:'Bearer '+T,
+    Accept:'application/vnd.github+json',
+    'Content-Type':'application/json'
+  }}))
+}function say(t){$('am').textContent=t}
 function pic(p){return p?"url('"+encodeURI(PRE[p]||p)+"')":'none'}
 try{var sv=JSON.parse(localStorage.getItem('ad_cfg')||'null');if(sv){$('o').value=sv.o;$('r').value=sv.r;$('k').value=sv.k;$('rm').checked=true}}catch(e){}
 if(!$('o').value&&/\.github\.io$/.test(location.hostname)){$('o').value=location.hostname.split('.')[0];$('r').value=location.pathname.split('/')[1]||''}
-$('go').onclick=async function(){O=$('o').value.trim();R=$('r').value.trim();T=$('k').value.trim();var m=$('lm');m.textContent='Checking…';
+$('go').onclick=async function(){O=$('o').value.trim();R=$('r').value.trim();T=$('k').value.replace(/\s/g,'');var m=$('lm');m.textContent='Checking…';
+if(/[^\x21-\x7E]/.test(T)){m.textContent='The access key has unusual characters. Copy it again from GitHub, without spaces.';return}
+if(typeof PRODUCTS==='undefined'||typeof DESC==='undefined'||!DESC['Native wear']){m.textContent='The product list did not load. Make sure products.js and products-extra.js are in the same folder as admin.html, then reload.';return}
 try{var r=await gh('');if(!r.ok){m.textContent='That key or repository was not accepted. Check the details.';return}
 var j=await r.json();if(!j.permissions||!j.permissions.push){m.textContent='This key can’t edit the site. Ask the owner for write access.';return}
 try{if($('rm').checked)localStorage.setItem('ad_cfg',JSON.stringify({o:O,r:R,k:T}));else localStorage.removeItem('ad_cfg')}catch(e){}
-await load();$('login').hidden=true;$('app').hidden=false;render()}catch(e){m.textContent='Could not connect ('+(e&&e.message?e.message:'unknown error')+'). Check your internet and try again.'}};
+await load();$('login').hidden=true;$('app').hidden=false;render()}catch(e){m.textContent='Could not connect ('+(e&&e.message?e.message:'unknown error')+'). Check your internet, turn off any ad blocker or VPN, and try again.'}};
 async function load(){var r=await gh('contents/data/store.js');
 if(r.ok){var j=await r.json();SHA=j.sha;var t=decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))));try{S=JSON.parse(t.slice(t.indexOf('=')+1,t.lastIndexOf(';')))}catch(e){S={}}}
 S.products=S.products||JSON.parse(JSON.stringify(PRODUCTS));S.text=S.text||{};
@@ -90,7 +98,7 @@ var ks=Object.keys(DEF),gr=[['Home page',ks.filter(function(k){return k.indexOf(
 $('tw').innerHTML=gr.map(function(g){return g[1].length?'<h3 class="wh">'+g[0]+'</h3><div class="g2">'+g[1].map(function(k){var v=S.text[k]!=null?S.text[k]:DEF[k];return '<label>'+esc(k.replace('Story page: ',''))+'<textarea data-w="'+esc(k)+'">'+esc(v)+'</textarea></label>'}).join('')+'</div>':''}).join('')||'<p class="sub">No editable wording found.</p>';
 $('st').textContent=dirty?'Unpublished changes':'Up to date'}
 $('q').oninput=render;$('so').onclick=function(){try{localStorage.removeItem('ad_cfg')}catch(e){}location.reload()};
-$('tb').onclick=function(e){var t=e.target.dataset.t;if(!t)return;document.querySelectorAll('#tb button').forEach(function(b){b.classList.toggle('on',b===e.target)});$('tp').hidden=t!=='p';$('tw').hidden=t!=='w'};
+$('tb').onclick=function(e){var t=e.target.dataset.t;if(!t)return;document.querySelectorAll('#tb button').forEach(function(b){b.classList.toggle('on',b===e.target)});$('tp').hidden=t!=='p';$('tw').hidden=t!=='w';$('ta').hidden=t!=='a';if(t==='a')actStart();else actStop()};
 $('tw').oninput=function(){dirty=true;$('st').textContent='Unpublished changes'};
 $('pl').onclick=function(e){var a=e.target.dataset;if(a.e!=null)edit(+a.e);if(a.x!=null&&confirm('Delete this product from the site?')){S.products.splice(+a.x,1);dirty=true;render()}};
 $('add').onclick=function(){edit(-1)};
@@ -108,11 +116,62 @@ function slots(){$('ps').innerHTML=W.img.map(function(p,k){return '<div class="p
 function note(){var p=+$('fp').value,w=+$('fw').value;$('dn').textContent=w>p&&p>0?'Shows as '+Math.round((1-p/w)*100)+'% off':(w&&w<=p?'The old price should be higher than the price.':'Leave the old price blank if there is no discount.');$('dc').textContent=$('fd').value.length+' characters'}
 function shrink(f){return new Promise(function(res){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var s=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.85));URL.revokeObjectURL(u)};im.src=u})}
 $('ed').oninput=note;
-$('ed').onchange=async function(e){var k=e.target.dataset.u;if(k==null||!e.target.files[0])return;k=+k;var em=$('em');em.textContent='Uploading picture '+(k+1)+'…';
-var b=await shrink(e.target.files[0]),slug=(cl($('fn').value)||'item').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'item',path='images/products/'+slug+'-'+(k+1)+'-'+Date.now()+'.jpg';
-var r=await gh('contents/'+path,{method:'PUT',body:JSON.stringify({message:'Admin: add product picture',content:b.split(',')[1]})});
-if(!r.ok){em.textContent='Upload failed. Try a smaller picture.';return}
-PRE[path]=b;W.img[k]=path;em.textContent='Picture added. Press Save product, then Publish changes.';slots()};
+$('ed').onchange = async function(e) {
+  var k = e.target.dataset.u;
+
+  if (k == null || !e.target.files[0]) return;
+
+  k = +k;
+
+  var em = $('em');
+  em.textContent = 'Uploading picture ' + (k + 1) + '...';
+
+  try {
+    var b = await shrink(e.target.files[0]);
+
+    var slug = (cl($('fn').value) || 'item')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'item';
+
+    var path = 'images/products/' + slug + '-' + (k + 1) + '-' + Date.now() + '.jpg';
+
+    var r = await gh('contents/' + path, {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Admin: add product picture',
+        content: b.split(',')[1],
+        branch: 'main'
+      })
+    });
+
+    var result = await r.json();
+
+    if (!r.ok) {
+      em.textContent = 'GitHub upload failed: ' +
+        (result.message || r.status);
+      console.error('GitHub image upload error:', result);
+      return;
+    }
+
+    if (!result.content || !result.content.path) {
+      em.textContent = 'Upload response was incomplete. Please try again.';
+      console.error('Unexpected upload response:', result);
+      return;
+    }
+
+    PRE[path] = b;
+    W.img[k] = path;
+
+    em.textContent = 'Image uploaded successfully! Press Save product, then Publish changes.';
+
+    slots();
+
+  } catch (err) {
+    em.textContent = 'Upload error: ' + (err.message || err);
+    console.error('Image upload error:', err);
+  }
+};
 $('ed').onclick=function(e){var a=e.target.dataset,t=e.target.id;
 if(a.m!=null){var k=+a.m,x=W.img[0];W.img[0]=W.img[k];W.img[k]=x;slots()}
 if(a.r!=null){W.img[+a.r]='';slots()}
@@ -121,9 +180,39 @@ if(t==='sp'){var n=cl($('fn').value);if(!n){$('em').textContent='Please add a na
 W.n=n;W.c=cl($('fc').value)||'Other';W.g=$('fg').value;W.p=+$('fp').value||0;W.f=cl($('ff').value);W.d=cl($('fd').value);var w=+$('fw').value,tg=$('ft').value;
 if(w)W.was=w;else delete W.was;if(tg)W.tag=tg;else delete W.tag;if(!W.d)delete W.d;
 if(cur<0)S.products.push(W);else S.products[cur]=W;dirty=true;$('md').hidden=true;render()}};
+var AT=null,APOLL=null;
+function sb(p){return fetch(SUPA_URL+p,{headers:Object.assign({apikey:SUPA_KEY},AT?{Authorization:'Bearer '+AT}:{})})}
+function actStop(){clearInterval(APOLL)}
+function actStart(){var box=$('ta');
+if(typeof SUPA_URL==='undefined'||!SUPA_URL){box.innerHTML='<p class="sub">Activity tracking is not connected yet. Add SUPA_URL and SUPA_KEY to config.js (see the setup guide).</p>';return}
+if(!AT){box.innerHTML='<p class="sub">Sign in with the admin email you created in Supabase to see live activity.</p><div class="g2" style="max-width:520px"><label>Admin email<input id="ae" type="email"></label><label>Password<input id="ap" type="password"></label></div><div class="msg" id="am2"></div><button class="btn" id="al" style="margin:0">View activity</button>';$('al').onclick=actLogin;return}
+actLoad();clearInterval(APOLL);APOLL=setInterval(actLoad,10000)}
+async function actLogin(){var m=$('am2');m.textContent='Signing in…';try{var r=await fetch(SUPA_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:$('ae').value.trim(),password:$('ap').value})});var j=await r.json();if(!r.ok||!j.access_token){m.textContent='Email or password not accepted.';return}AT=j.access_token;actStart()}catch(e){m.textContent='Could not connect.'}}
+async function actLoad(){var since=new Date(Date.now()-7*864e5).toISOString();
+var r=await sb('/rest/v1/events?select=vid,type,page,item,qty,total,created_at&created_at=gte.'+since+'&order=created_at.desc&limit=5000');
+if(!r.ok){AT=null;actStop();$('ta').innerHTML='<p class="sub">Could not read activity (error '+r.status+'). Check that this email is listed as an admin in Supabase.</p>';return}
+var ev=await r.json(),now=Date.now(),T=function(e){return new Date(e.created_at).getTime()};
+var uniq=function(a){var o={};a.forEach(function(e){o[e.vid]=1});return Object.keys(o).length};
+var top=function(t,n){var c={};ev.filter(function(e){return e.type===t&&e.item}).forEach(function(e){e.item.split(', ').forEach(function(i){c[i]=(c[i]||0)+1})});return Object.keys(c).sort(function(a,b){return c[b]-c[a]}).slice(0,n).map(function(k){return [k,c[k]]})};
+var live=ev.filter(function(e){return T(e)>now-3e5}),today=ev.filter(function(e){return T(e)>now-864e5});
+var o7=ev.filter(function(e){return e.type==='order_whatsapp'}),oT=today.filter(function(e){return e.type==='order_whatsapp'}),v7=uniq(ev);
+var card=function(l,v,s){return '<div class="stat"><b>'+v+'</b><span>'+l+(s?'<br>'+s:'')+'</span></div>'};
+var list=function(a){return a.length?'<ol style="margin:0;padding-left:20px">'+a.map(function(x){return '<li>'+esc(x[0])+' <b>'+x[1]+'</b></li>'}).join('')+'</ol>':'<p class="sub">Nothing yet.</p>'};
+var ago=function(e){var s=Math.round((now-T(e))/1000);return s<60?s+'s ago':s<3600?Math.round(s/60)+' min ago':Math.round(s/3600)+' h ago'};
+var lab={visit:'New visit',page_view:'Viewed',product_view:'Looked at',add_to_bag:'Added to bag',order_whatsapp:'Sent an order to WhatsApp',fitting_request:'Started a fitting request',design_request:'Started a design request'};
+$('ta').innerHTML='<div class="stats">'+card('Online now (5 min)',uniq(live))+card('Visitors today',uniq(today))+card('Visitors (7 days)',v7)+card('Orders to WhatsApp today',oT.length)+card('Orders to WhatsApp (7 days)',o7.length,v7?(o7.length/v7*100).toFixed(1)+'% of visitors':'')+'</div>'
++'<div class="g3"><div><h3 class="wh">Most looked at</h3>'+list(top('product_view',6))+'</div><div><h3 class="wh">Most added to bag</h3>'+list(top('add_to_bag',6))+'</div><div><h3 class="wh">Most ordered</h3>'+list(top('order_whatsapp',6))+'</div></div>'
++'<h3 class="wh">Orders going to WhatsApp</h3>'+(o7.length?o7.slice(0,8).map(function(e){return '<div class="pl" style="margin-bottom:6px"><div class="nm"><b>'+esc(e.item||'')+'</b><br><small>'+(e.qty||0)+' item(s) \u00b7 \u20a6'+(+e.total||0).toLocaleString()+' \u00b7 '+ago(e)+'</small></div></div>'}).join(''):'<p class="sub">No orders yet.</p>')
++'<h3 class="wh">Live feed</h3>'+ev.slice(0,15).map(function(e){return '<div class="sub" style="margin:4px 0">'+ago(e)+' \u2014 '+(lab[e.type]||e.type)+(e.item?': '+esc(e.item):(e.page?' ('+esc(e.page)+')':''))+'</div>'}).join('')+'<p class="hint">Updates every 10 seconds while this tab is open.</p>'}
 $('pub').onclick=async function(){say('Publishing…');
 document.querySelectorAll('[data-w]').forEach(function(t){var k=t.dataset.w;if(t.value!==DEF[k])S.text[k]=t.value;else delete S.text[k]});
-var body={message:'Admin: update products and wording',content:btoa(unescape(encodeURIComponent('var STORE='+JSON.stringify(S)+';\n')))};if(SHA)body.sha=SHA;
+var body = {
+  message: 'Admin: update products and wording',
+  content: btoa(unescape(encodeURIComponent('var STORE=' + JSON.stringify(S) + ';\n'))),
+  branch: 'main'
+};
+
+if (SHA) body.sha = SHA;
 var r=await gh('contents/data/store.js',{method:'PUT',body:JSON.stringify(body)});
 if(!r.ok){say(r.status===409||r.status===422?'Someone else changed the site. Reload this page and try again.':'Could not publish (error '+r.status+').');return}
 SHA=(await r.json()).content.sha;dirty=false;render();say('Published. The live site updates in about a minute.')};
