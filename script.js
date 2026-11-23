@@ -38,11 +38,11 @@ document.addEventListener('click',function(e){if(user)return;if(e.target.closest
 if(!user&&(pg==='design'||pg==='book'))showGate();
 
 (function(){if(user||pg==='signin')return;try{var now=Date.now(),t0=+sessionStorage.getItem('mn_t0');if(!t0){t0=now;sessionStorage.setItem('mn_t0',t0)}
-var cl=+localStorage.getItem('mn_promo');if(cl&&now-cl<864e5)return;
+var seen=sessionStorage.getItem('mn_seen');
 document.body.insertAdjacentHTML('beforeend','<div id="promo" class="gate" hidden><div class="gbox"><button class="gx" id="px" aria-label="Close">\u2715</button><h3>Get exclusive offers</h3><p class="sub">Sign up to receive exclusive discounts and be the first to hear about new arrivals.</p><a class="btn" href="signin.html?m=up">Sign up now</a></div></div>');
-function closeP(){$('promo').hidden=true;try{localStorage.setItem('mn_promo',Date.now())}catch(e){}}
+function closeP(){$('promo').hidden=true}
 $('px').onclick=closeP;$('promo').onclick=function(e){if(e.target===this)closeP()};
-setTimeout(function(){if(!(ld('mn_user',null)||sld('mn_user'))&&$('gate').hidden)$('promo').hidden=false},Math.max(0,6e4-(now-t0)))}catch(e){}})();
+setTimeout(function(){if(!(ld('mn_user',null)||sld('mn_user'))&&$('gate').hidden){$('promo').hidden=false;try{sessionStorage.setItem('mn_seen','1')}catch(e){}}},seen?1500:Math.max(0,6e4-(now-t0)))}catch(e){}})();
 var bag=ld('mn_bag',{});
 function addBag(i,sz,q){var k=i+'|'+(sz||'');bag[k]=(bag[k]||0)+(q||1);sv('mn_bag',bag);renderBag()}
 function renderBag(){var k=Object.keys(bag),t=0,q=0,msg='Hello '+BRAND+', I\u2019d like to order:\n';
