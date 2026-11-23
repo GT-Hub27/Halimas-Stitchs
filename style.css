@@ -32,7 +32,7 @@ nav a:hover{color:var(--accent)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .sw{aspect-ratio:3/4}
 .card .in{padding:12px 14px 14px}
-.grid .card{transition:transform .3s ease,box-shadow .3s ease}
+.grid .card{transition:transform .7s ease,box-shadow .7s ease}
 .grid .card:hover{transform:scale(1.02);box-shadow:0 10px 26px rgba(0,0,0,.14)}
 .grid .sw{transition:transform .5s ease}
 .grid .card:hover .sw{transform:scale(1.04)}
@@ -110,7 +110,6 @@ footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-s
 @media(max-width:720px){.bk,.fg{grid-template-columns:1fr}}
 @media(max-width:720px){.hero{grid-template-columns:1fr;padding-top:36px}nav{display:none}.art{max-height:340px;aspect-ratio:auto;height:300px}}
 
-/* ===== shared layout, menus, product page, story page, sign-in ===== */
 .hr{display:flex;align-items:center;gap:14px}.acc{font-size:14px;cursor:pointer}
 header nav a.cur{color:var(--accent)}
 .mbtn{display:none;width:40px;height:40px;border:1px solid var(--fg);border-radius:50%;background:none;color:var(--fg);font-size:18px;cursor:pointer;align-items:center;justify-content:center}
@@ -174,7 +173,6 @@ footer{padding-left:16px;padding-right:16px}
 .tiles::-webkit-scrollbar{display:none}
 .tiles .tile{flex:1 0 min(78vw,300px);scroll-snap-align:start}
 
-/* ===== tile arrows and a smaller, softer Add to bag button ===== */
 .tw{position:relative}
 .tw .ar{position:absolute;top:50%;transform:translateY(-50%);z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .tw .al{left:8px}.tw .arr{right:8px}
@@ -185,7 +183,6 @@ footer{padding-left:16px;padding-right:16px}
 .info .btn{padding:10px 22px;font-size:15px}
 @media(max-width:520px){.grid .card .r span{font-size:14px}.grid .card button{padding:0 11px;font-size:12px}.t2{display:none}.info .btn{padding:9px 18px;font-size:14px}}
 
-/* keep the Add to bag text on one line; use the short "Add" on narrower cards */
 .grid .card button{white-space:nowrap;flex:none}
 .grid .card .r span{white-space:nowrap}
 @media(max-width:900px){.t2{display:none}.grid .card button{min-width:56px;padding:0 12px}}
@@ -197,27 +194,25 @@ footer{padding-left:16px;padding-right:16px}
 @keyframes fsr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){.fst{animation:none}}
 
-/* anything marked hidden stays hidden (used to switch the flash sale bar off) */
 [hidden]{display:none!important}
 
-/* ===== labels and crossed-out prices (set in the admin page) ===== */
 .sw{position:relative}.tg{position:absolute;top:10px;left:10px;font-style:normal;background:var(--accent);color:var(--accent-fg);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
 .was{color:var(--muted);font-size:.85em;margin-right:4px}
 
-/* old (crossed-out) price: smaller and stacked under the new price, so the Add button is never squeezed */
+
 .grid .card .r>span{display:flex;flex-direction:column-reverse;line-height:1.2;min-width:0}
 .grid .card .r button span{display:inline}
 .grid .card .r .was{font-size:11px;margin:0}
 .grid .card .r button{flex:none}
 
-/* ===== sign-up strip, password eye, remember me ===== */
+/* sign-up strip,remember me */
 .sb{background:var(--accent);color:var(--accent-fg);text-align:center;font-size:13px;padding:8px 12px}.sb a{text-decoration:underline;font-weight:500;margin:0 3px}
 .pwf{display:block;position:relative}.pwf input{padding-right:46px}
 .eye{position:absolute;right:6px;bottom:5px;width:36px;height:34px;border:0;background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .auth label.rm{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:14px}
 .auth input[type=checkbox]{width:auto;margin:0;padding:0}
 
-/* ===== scrolling side menu, small swipe row on product pages, stitch theme ===== */
+
 #sm{overflow:hidden}.smn{overflow-y:auto;flex:1;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:24px}
 .hs.sm{gap:14px}.hs.sm .card{flex:0 0 clamp(150px,19vw,176px)}
 .hs.sm .card h3{font-size:16px}.hs.sm .card .in{padding:10px 11px 11px}.hs.sm .card .c{font-size:11px}
@@ -235,6 +230,38 @@ header{border-bottom:2px dashed var(--st)}footer{border-top:2px dashed var(--st)
 .grid .card{border:1px dashed var(--st)}
 .art{outline:2px dashed var(--st);outline-offset:8px}
 
-/* smaller, lighter Add to bag button */
 .grid .card button{height:26px;min-width:50px;padding:0 10px;font-size:11px;font-weight:400;letter-spacing:.01em;border:1px solid var(--accent);border:1px solid color-mix(in srgb,var(--accent) 50%,transparent)}
 .hs.sm .card button{height:24px;min-width:44px;padding:0 9px;font-size:10.5px}
+
+/* FIX ONLY: You May Also Like — mobile Add to bag button */
+@media (max-width: 480px) {
+  .hs.sm .card .r {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  .hs.sm .card .r > span {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    font-size: 12px !important;
+  }
+
+  .hs.sm .card .r button {
+    flex: 0 0 68px !important;
+    width: 68px !important;
+    min-width: 68px !important;
+    max-width: 68px !important;
+    height: 26px !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .hs.sm .card .r button .t2 {
+    display: none !important;
+  }
+}
