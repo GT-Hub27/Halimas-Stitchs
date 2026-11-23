@@ -3,21 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-<title>Sign in | Halima Stitches</title>
+<!-- ✏️ EDIT: text shown in the browser tab -->
+<title>Sign in | Maison Nova</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="signin">
 <div id="hdr"></div>
 <main>
-
+<!-- ✏️ EDIT TEXT: sign-in wording. Real SMS codes need a small server, see config.js -->
 <div class="wrap sec"><div class="auth card">
 <h2>Welcome</h2><p class="sub">Sign in with your phone number, or create an account.</p>
 <div class="tabs" id="atabs"><button class="on" data-m="in">Sign in</button><button data-m="up">Create account</button></div>
 <div id="s1"><label>Phone number<input id="ph" type="tel" inputmode="tel" autocomplete="tel" placeholder="0803 123 4567"></label>
-<label>Password<input id="pw" type="password" autocomplete="current-password"></label>
-<label id="cfl" hidden>Confirm password<input id="pw2" type="password" autocomplete="new-password"></label>
+<label>Password<span class="pwf"><input id="pw" type="password" autocomplete="current-password"><button type="button" class="eye" data-eye="pw" aria-label="Show password"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><path class="sl" d="M3 3l18 18" style="display:none"/></svg></button></span></label>
+<label id="cfl" hidden>Confirm password<span class="pwf"><input id="pw2" type="password" autocomplete="new-password"><button type="button" class="eye" data-eye="pw2" aria-label="Show password"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><path class="sl" d="M3 3l18 18" style="display:none"/></svg></button></span></label>
+<label class="rm"><input type="checkbox" id="rem"> Remember me on this device</label>
 <div class="sub amsg" id="am"></div><button class="btn" id="ago">Continue</button></div>
 <div id="s2" hidden><p class="sub" id="ot"></p><div class="demo" id="dm2" hidden></div>
 <label>Verification code<input id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6-digit code"></label>
@@ -28,6 +29,7 @@
 <div id="ftr"></div>
 <script src="config.js"></script>
 <script src="products.js"></script>
+<script src="products-extra.js"></script>
 <script src="data/store.js"></script>
 <script src="script.js"></script>
 </body>

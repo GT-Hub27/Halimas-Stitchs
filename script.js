@@ -11,16 +11,19 @@ function bgOf(x,k){k=k||0;var m=(x.img||[])[k];return m?"url('"+encodeURI(m)+"')
 function sizes(x){return x.c==='Accessories'?[]:['XS','S','M','L','XL']}
 document.documentElement.classList.add('js');
 
+
 var logoHtml=(typeof LOGO!=='undefined'&&LOGO)?'<img class="logoimg" src="'+LOGO+'" alt="'+BRAND+'">':BRAND;
-var user=ld('mn_user',null);
+function sld(k){try{var v=sessionStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+
+var user=ld('mn_user',null)||sld('mn_user');
 var LINKS=[['index.html','Home','home'],['women.html','Women','women'],['men.html','Men','men'],['accessories.html?t=F','Accessories','accessories'],['design.html','Custom design','design'],['story.html','Our story','story'],['book.html','Book a fitting','book']];
 var ACCS=[['M','Male accessories'],['F','Female accessories'],['U','Unisex accessories']];
 function nav(side){return LINKS.map(function(l){var a='<a href="'+l[0]+'"'+(pg===l[2]?' class="cur"':'')+'>'+l[1]+'</a>';if(l[2]!=='accessories')return a;var m=ACCS.map(function(c){return '<a href="accessories.html?t='+c[0]+'">'+c[1]+'</a>'}).join('');return side?a+'<div class="sub2">'+m+'</div>':'<span class="dd">'+a+'<span class="ddm">'+m+'</span></span>'}).join('')}
 var acct=user?'Sign out':'Sign in';
-$('hdr').innerHTML='<header><div class="wrap"><a class="logo" href="index.html">'+logoHtml+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a>'+(user?'<button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button>':'')+'<button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+logoHtml+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav(1)+'<a href="signin.html" id="acc2">'+acct+'</a></div></aside>';
+$('hdr').innerHTML=(user||pg==='signin'?'':'<div class="sb">\u2728 Sign up for exclusive discounts and first access to new arrivals \u00b7 <a href="signin.html?m=up">Sign up</a> \u00b7 <a href="signin.html">Sign in</a></div>')+'<header><div class="wrap"><a class="logo" href="index.html">'+logoHtml+'</a><nav>'+nav()+'</nav><div class="hr"><a class="acc" id="acc" href="signin.html">'+acct+'</a>'+(user?'<button class="bagbtn" id="bb">Bag (<span id="bc">0</span>)</button>':'')+'<button class="mbtn" id="mb" aria-label="Open menu">☰</button></div></div></header><div id="ov"></div><aside id="sm"><div class="smh"><a class="logo" href="index.html">'+logoHtml+'</a><button class="bagbtn" id="sx">Close</button></div><div class="smn">'+nav(1)+'<a href="signin.html" id="acc2">'+acct+'</a>'+(user?'':'<a href="signin.html?m=up">Sign up</a>')+'</div></aside>';
 
 $('ftr').innerHTML='<section class="wrap sec" id="contact"><h2>Contact us</h2><p class="sub">Questions, custom orders or bulk requests? We’d love to hear from you.</p><div class="cols"><div><b>Email</b><br><a href="mailto:'+MAIL+'">Send us an email</a></div><div><b>Instagram</b><br>'+INSTAGRAM+'</div><div><b>Studio</b><br>'+ADDR+'<br>'+HOURS+'</div></div></section><footer>© '+new Date().getFullYear()+' '+BRAND+'. All rights reserved. · <a href="admin.html">Admin</a></footer>'+"<aside id=\"dr\" aria-label=\"Shopping bag\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:8px\"><h2 style=\"font-size:28px\">Your bag</h2><button class=\"bagbtn\" id=\"cl\">Close</button></div>\n<div id=\"dl\"></div>\n<div style=\"padding-top:12px\"><div class=\"li\" style=\"border:0;font-weight:500\"><span>Total</span><span id=\"tt\">\u20a60</span></div>\n<a class=\"btn\" id=\"wa\" href=\"#\" target=\"_blank\" rel=\"noopener\" style=\"display:block;text-align:center;margin-top:6px\">Order on WhatsApp</a></div>\n</aside>";
-function signout(e){if(user){e.preventDefault();try{localStorage.removeItem('mn_user')}catch(x){}location.reload()}}
+function signout(e){if(user){e.preventDefault();try{localStorage.removeItem('mn_user');sessionStorage.removeItem('mn_user')}catch(x){}location.reload()}}
 $('acc').onclick=$('acc2').onclick=signout;
 function menu(o){$('sm').classList.toggle('open',o);$('ov').classList.toggle('open',o);document.body.classList.toggle('lock',o)}
 $('mb').onclick=function(){menu(true)};$('sx').onclick=$('ov').onclick=function(){menu(false)};
@@ -34,6 +37,12 @@ $('gx').onclick=function(){$('gate').hidden=true};
 document.addEventListener('click',function(e){if(user)return;if(e.target.closest('#wa,#pwa,#pa,[data-a],#bgo,#dgo,a[href^="design.html"],a[href^="book.html"]')){e.preventDefault();e.stopPropagation();showGate()}},true);
 if(!user&&(pg==='design'||pg==='book'))showGate();
 
+(function(){if(user||pg==='signin')return;try{var now=Date.now(),t0=+sessionStorage.getItem('mn_t0');if(!t0){t0=now;sessionStorage.setItem('mn_t0',t0)}
+var cl=+localStorage.getItem('mn_promo');if(cl&&now-cl<864e5)return;
+document.body.insertAdjacentHTML('beforeend','<div id="promo" class="gate" hidden><div class="gbox"><button class="gx" id="px" aria-label="Close">\u2715</button><h3>Get exclusive offers</h3><p class="sub">Sign up to receive exclusive discounts and be the first to hear about new arrivals.</p><a class="btn" href="signin.html?m=up">Sign up now</a></div></div>');
+function closeP(){$('promo').hidden=true;try{localStorage.setItem('mn_promo',Date.now())}catch(e){}}
+$('px').onclick=closeP;$('promo').onclick=function(e){if(e.target===this)closeP()};
+setTimeout(function(){if(!(ld('mn_user',null)||sld('mn_user'))&&$('gate').hidden)$('promo').hidden=false},Math.max(0,6e4-(now-t0)))}catch(e){}})();
 var bag=ld('mn_bag',{});
 function addBag(i,sz,q){var k=i+'|'+(sz||'');bag[k]=(bag[k]||0)+(q||1);sv('mn_bag',bag);renderBag()}
 function renderBag(){var k=Object.keys(bag),t=0,q=0,msg='Hello '+BRAND+', I\u2019d like to order:\n';
@@ -69,12 +78,13 @@ var pi=+new URLSearchParams(location.search).get('id'),px0=P[pi]||P[0];pi=P.inde
 var sz=sizes(px0),sel=sz.length?'M':'',qty=1,bk=px0.c==='Accessories'?'accessories.html?t='+px0.g:px0.g==='M'?'men.html':'women.html';
 document.title=px0.n+' | '+BRAND;
 var wl=function(){return 'https://wa.me/'+WA+'?text='+encodeURIComponent('Hello '+BRAND+', I\u2019d like to order '+qty+' × '+px0.n+(sel?' (size '+sel+')':'')+' ('+naira(px0.p*qty)+').')};
-var rel=[];P.forEach(function(x,i){if(x.c===px0.c&&x.g===px0.g&&i!==pi)rel.push(i)});
+var sc=function(i){var x=P[i];return (x.c===px0.c?2:0)+(x.g===px0.g?1:0)+((x.c==='Accessories')===(px0.c==='Accessories')?.5:0)},rel=P.map(function(x,i){return i}).filter(function(i){return i!==pi}).sort(function(a,b){return sc(b)-sc(a)});
 $('pd').innerHTML='<a class="back" href="'+bk+'">← Back</a><div class="pdg"><div><div id="gmain" style="background:'+bgOf(px0,0)+'"></div><div class="th">'+[0,1,2,3].map(function(k){return '<button data-k="'+k+'" class="'+(k?'':'on')+'" style="background:'+bgOf(px0,k)+'" aria-label="View picture '+(k+1)+'"></button>'}).join('')+'</div></div><div class="info"><div class="c" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:12px">'+px0.c+(px0.g==='M'?' · Men':px0.g==='F'?' · Women':' · Unisex')+'</div><h1>'+px0.n+'</h1><div class="pr">'+(px0.was?'<s class="was">'+naira(px0.was)+'</s> ':'')+naira(px0.p)+(px0.tag?' <i class="tg" style="position:static;vertical-align:middle">'+px0.tag+'</i>':'')+'</div><p class="sub">'+(px0.d||DESC[px0.c]||'')+'</p>'+
 (sz.length?'<label class="sub" style="margin:0">Size</label><div class="sz" id="szs">'+sz.map(function(s){return '<button data-s="'+s+'" class="'+(s===sel?'on':'')+'">'+s+'</button>'}).join('')+'</div>':'')+
 '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><div class="qty"><button data-q="-1" aria-label="Fewer">−</button><span id="qv">1</span><button data-q="1" aria-label="More">+</button></div><button class="btn" id="pa">Add to bag</button><a class="btn o" id="pwa" target="_blank" rel="noopener" style="margin:0">Order on WhatsApp</a></div>'+
 '<dl class="dt"><div><dt>Fabric</dt><dd>'+(px0.f||'Quality fabric')+'</dd></div><div><dt>Sizes</dt><dd>'+(sz.length?sz.join(', ')+', or made to your measurements':'One size')+'</dd></div><div><dt>Care</dt><dd>Hand wash cold or dry clean. Iron on a low heat.</dd></div><div><dt>Delivery</dt><dd>Made to order. Timelines are confirmed with you on WhatsApp.</dd></div></dl></div></div>'+
-(rel.length?'<h2>You may also like</h2><div class="grid" style="margin-top:18px">'+rel.slice(0,4).map(cardHtml).join('')+'</div>':'');
+(rel.length?'<div class="rs pdr"><div class="rh"><h3>You may also like</h3><div class="rc"><button class="ar" data-d="-1" aria-label="Scroll left">\u2039</button><button class="ar" data-d="1" aria-label="Scroll right">\u203a</button></div></div><div class="grid hs sm">'+rel.slice(0,8).map(cardHtml).join('')+'</div></div>':'');
+
 var upd=function(){$('qv').textContent=qty;$('pwa').href=wl()};upd();
 $('pd').addEventListener('click',function(e){var t=e.target,m;
 if((m=t.closest('[data-k]'))){var g=$('gmain');var kk=+m.dataset.k;g.style.opacity=0;setTimeout(function(){g.style.background=bgOf(px0,kk);g.style.opacity=1},150);document.querySelectorAll('.th button').forEach(function(b){b.classList.toggle('on',b===m)})}
@@ -93,6 +103,8 @@ if(pxs.length&&!matchMedia('(prefers-reduced-motion:reduce)').matches)addEventLi
 /* ---------- sign in: phone + password + OTP ---------- */
 if(pg==='signin'){
 var mode='in',pend=null,code=null,exp=0,tm=null;
+document.querySelectorAll('[data-eye]').forEach(function(b){b.onclick=function(){var i=$(b.dataset.eye),sh=i.type==='password';i.type=sh?'text':'password';b.querySelector('.sl').style.display=sh?'inline':'none';b.setAttribute('aria-label',sh?'Hide password':'Show password')}});
+
 var normPhone=function(v){var d=v.replace(/\D/g,'');if(/^0[789][01]\d{8}$/.test(d))return '234'+d.slice(1);if(/^234[789][01]\d{8}$/.test(d))return d;return ''};
 var hx=async function(s){try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}catch(e){return btoa(unescape(encodeURIComponent(s)))}};
 $('atabs').onclick=function(e){var m=e.target.dataset.m;if(!m)return;mode=m;document.querySelectorAll('#atabs button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m)});$('cfl').hidden=m==='in';$('am').textContent=''};
@@ -114,8 +126,10 @@ $('avf').onclick=async function(){var m=$('am2'),v=$('otp').value.trim(),ok=fals
 if(OTP_VERIFY_URL){try{var r=await fetch(OTP_VERIFY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:'+'+pend.p,code:v})});ok=r.ok}catch(e){}}
 else ok=OTP_DEMO&&v===code&&Date.now()<exp;
 if(!ok){m.textContent='That code isn\u2019t right or has expired. Please try again.';return}
+
 if(mode==='up'){var us=ld('mn_users',{});us[pend.p]=pend.h;sv('mn_users',us)}
-sv('mn_user',{p:pend.p});var nx=ld('mn_next','index.html');try{localStorage.removeItem('mn_next')}catch(x){}location.href=/^[a-z]+\.html(\?.*)?$/.test(nx)?nx:'index.html'};
+var ob={p:pend.p};if($('rem').checked)sv('mn_user',ob);else{try{sessionStorage.setItem('mn_user',JSON.stringify(ob))}catch(e){}}var nx=ld('mn_next','index.html');try{localStorage.removeItem('mn_next')}catch(x){}location.href=/^[a-z]+\.html(\?.*)?$/.test(nx)?nx:'index.html'};
+
 $('rsd').onclick=sendOtp;$('abk').onclick=function(){$('s1').hidden=false;$('s2').hidden=true};
 }
 
