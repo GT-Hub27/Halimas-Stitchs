@@ -148,6 +148,12 @@ body.lock{overflow:hidden}
 .demo{background:var(--bg);border:1px dashed var(--accent);border-radius:10px;padding:10px;font-size:13px;margin-top:12px}
 
 .logo{display:flex;align-items:center}.logoimg{height:42px;width:auto;display:block}#sm .logoimg{height:36px}
+.art.hero-mark{width:100%;max-width:420px;aspect-ratio:auto;justify-self:center;border-radius:0;background:none;outline:0;outline-offset:0;display:flex;align-items:center;justify-content:center}
+.hero-mark img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;animation:hero-logo-float 5s ease-in-out infinite}
+@keyframes hero-logo-float{50%{transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.hero-mark img{animation:none}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .logoimg,:root:not([data-theme="light"]) .hero-mark img{filter:brightness(0) invert(1)}}
+:root[data-theme="dark"] .logoimg,:root[data-theme="dark"] .hero-mark img{filter:brightness(0) invert(1)}
 
 /* ===== women / men / accessories menu, tiles, sign-in popup ===== */
 .dd{position:relative;display:inline-block}.ddm{display:none;position:absolute;top:100%;left:-10px;padding-top:12px;min-width:210px;flex-direction:column;z-index:70}
@@ -271,3 +277,13 @@ header{border-bottom:2px dashed var(--st)}footer{border-top:2px dashed var(--st)
 @media(max-width:640px){#grid{gap:8px}#grid .card .in{padding:7px 7px 8px}#grid .card .c{display:none}
 #grid .card h3{font-size:12.5px;line-height:1.2;height:3.6em}#grid .card .r{flex-direction:column;align-items:stretch;gap:6px;padding-top:6px}
 #grid .card .r>span{font-size:12px}#grid .card .r .was{font-size:9.5px}#grid .card button{width:100%;min-width:0;height:24px;padding:0;font-size:10.5px}}
+
+
+/* small screens: wording, then the logo, then smaller buttons side by side under the logo */
+@media(max-width:720px){
+.hero{display:grid;grid-template-columns:1fr auto auto 1fr;column-gap:8px;row-gap:14px;padding-top:30px}
+.hero>div:first-child{display:contents}
+.hero h1,.hero p,.hero>.art{grid-column:1/-1}
+.hero h1{order:1}.hero p{order:2;margin:0}.hero>.art{order:3}.art.hero-mark{max-width:320px;height:auto;max-height:none}
+.hero .btn{order:4;grid-column:2;padding:9px 16px;font-size:13px;white-space:nowrap}
+.hero .btn.o{grid-column:3;margin-left:0}}

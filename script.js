@@ -180,7 +180,9 @@ dview();
 
 document.querySelectorAll('.addr').forEach(function(e){e.textContent=ADDR});
 $('mp').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(ADDR);
-if(HERO_IMAGE)$('heroimg').style.background='url("'+HERO_IMAGE+'") center/cover no-repeat';
+var hb=document.getElementById('heroimg');
+if(hb&&typeof HERO_LOGO!=='undefined'&&HERO_LOGO){hb.classList.add('hero-mark');hb.removeAttribute('role');hb.removeAttribute('aria-label');hb.innerHTML='<img src="'+HERO_LOGO+'" alt="'+BRAND+'">'}
+if(hb&&typeof HERO_IMAGE!=='undefined'&&HERO_IMAGE)hb.style.background='url("'+HERO_IMAGE+'") center/cover no-repeat';
 /* arrows for the Women / Men / Accessories tile row */
 document.querySelectorAll('.tiles').forEach(function(t){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);w.insertAdjacentHTML('beforeend','<button class="ar al" data-d="-1" aria-label="Scroll left">‹</button><button class="ar arr" data-d="1" aria-label="Scroll right">›</button>');
 function chk(){w.classList.toggle('no',t.scrollWidth<=t.clientWidth+4)}chk();addEventListener('resize',chk)});

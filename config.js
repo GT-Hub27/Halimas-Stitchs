@@ -1,6 +1,7 @@
 
 var BRAND='Halima Stitches';                
-var LOGO='';
+var LOGO='images/logo.png';
+var HERO_LOGO='images/hero-logo.png';
 var WA='234702';                 
 var INSTAGRAM='@halima_stitches01';            
 var ADDR='Your Street Address, Area, City, State, Nigeria';  
